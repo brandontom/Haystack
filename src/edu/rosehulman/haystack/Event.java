@@ -9,7 +9,7 @@ public class Event {
 	private int mStartMinute;
 	private int mEndHour;
 	private int mEndMinute;
-	private String mLocation;
+	private String mAddress;
 	private String mDescription;
 	private int mEventID;
 
@@ -20,6 +20,7 @@ public class Event {
 		mEndHour = 11;
 		mEndMinute = 0;
 		mDescription = "Free Drinks on Tuesdays!";
+		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
 	}
 
 	public String getTitle() {
@@ -47,6 +48,14 @@ public class Event {
 
 	public int getId() {
 		return mEventID;
+	}
+
+	public CharSequence getAddress() {
+		return mAddress;
+	}
+
+	public CharSequence getFullDescription() {
+		return mDescription;
 	}
 
 }
