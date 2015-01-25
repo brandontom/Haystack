@@ -1,5 +1,7 @@
 package edu.rosehulman.haystack;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 
 import android.app.ActionBar;
@@ -11,6 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.widget.DrawerLayout;
 
 public class MainActivity extends Activity implements
@@ -21,6 +28,10 @@ public class MainActivity extends Activity implements
 	 * navigation drawer.
 	 */
 	private SideSwipeFragment mNavigationDrawerFragment;
+	
+	private ListView mListView;
+	private Spinner mSortSpinner;
+	private Spinner mTimeSpinner;
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -39,6 +50,38 @@ public class MainActivity extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		
+		mListView = (ListView) findViewById(R.id.main_activity_list_view);
+		
+		setUpListView();
+	}
+
+	private void setUpListView() {
+		ArrayList<Event> events = new ArrayList<Event>();
+		populateEvents(events);
+
+		final EventTileAdapter adapter = new EventTileAdapter(this, events);
+
+		mListView.setAdapter(adapter);
+		
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Toast.makeText(MainActivity.this, "You pressed " + adapter.getItem(position),
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private void populateEvents(ArrayList<Event> events) {
+		events.add(new Event());
+		events.add(new Event());
+		events.add(new Event());
+		events.add(new Event());
+		events.add(new Event());
+		events.add(new Event());
 	}
 
 	@Override

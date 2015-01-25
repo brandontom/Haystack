@@ -12,5 +12,6 @@
     <string name="search">Search</string>
     <string name="search_hint">Search Events</string>
     <string name="app_label">Haystack</string>
+    <string name="events_for">Events For</string>
 
 </resources>
