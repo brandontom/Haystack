@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -51,7 +52,29 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		mListView = (ListView) findViewById(R.id.main_activity_list_view);
 
+		mSortSpinner = (Spinner) findViewById(R.id.sort_spinner);
+		mTimeSpinner = (Spinner) findViewById(R.id.time_spinner);
+
+		setUpSpinners();
+
 		setUpListView();
+	}
+
+	private void setUpSpinners() {
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
+
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		mSortSpinner.setAdapter(arraySpinnerAdapter);
+
+		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
+
+		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		mTimeSpinner.setAdapter(timeSpinnerAdapter);
+
 	}
 
 	private void setUpListView() {

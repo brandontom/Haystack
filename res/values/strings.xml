@@ -5,6 +5,7 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="post_new_event">Post new event</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -16,6 +17,13 @@
     <string name="event_time">8:00 PM - 12:00 AM</string>
     <string name="event_title">Action Center</string>
     <string name="event_description">Half-off drinks on tuesdays</string>
-	<string name="like_event">Like this event</string>
+    <string name="like_event">Like this event</string>
+
+    <string-array name="sort_spinner_array">
+        <item>Featured</item>
+    </string-array>
+    <string-array name="time_spinner_array">
+        <item>Today</item>
+    </string-array>
 
 </resources>
