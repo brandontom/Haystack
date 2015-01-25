@@ -27,4 +27,7 @@
         <item>Today</item>
     </string-array>
 
+    <string name="title_activity_post_new_event">PostNewEventActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
