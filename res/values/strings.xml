@@ -13,5 +13,9 @@
     <string name="search_hint">Search Events</string>
     <string name="app_label">Haystack</string>
     <string name="events_for">Events For</string>
+    <string name="event_time">8:00 PM - 12:00 AM</string>
+    <string name="event_title">Action Center</string>
+    <string name="event_description">Half-off drinks on tuesdays</string>
+	<string name="like_event">Like this event</string>
 
 </resources>

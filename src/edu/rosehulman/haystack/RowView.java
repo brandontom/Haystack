@@ -7,22 +7,28 @@ import android.widget.TextView;
 
 public class RowView extends LinearLayout {
 	
-	private TextView mLeftTextView;
-	private TextView mRightTextView;
+	private TextView mTitleTextView;
+	private TextView mTimeTextView;
+	private TextView mDescriptionTextView;
 
 	public RowView(Context context) {
 		super(context);
-		LayoutInflater.from(context).inflate(R.layout.view_event_tile, this);
-		mLeftTextView = (TextView) findViewById(R.id.left_text_view);
-		mRightTextView = (TextView) findViewById(R.id.right_text_view);
+		LayoutInflater.from(context).inflate(R.layout.rowview_event, this);
+		mTitleTextView = (TextView) findViewById(R.id.rowview_title);
+		mTimeTextView = (TextView) findViewById(R.id.rowview_time);
+		mDescriptionTextView = (TextView) findViewById(R.id.rowview_description);
 	}
 
-	public void setLeftText(String string) {
-		mLeftTextView.setText(string);
+	public void setTitleText(String string) {
+		mTitleTextView.setText(string);
 	}
 
-	public void setRightText(String string) {
-		mRightTextView.setText(string);
+	public void setTimeText(String string) {
+		mTimeTextView.setText(string);
+	}
+	
+	public void setDescriptionText(String string) {
+		mDescriptionTextView.setText(string);
 	}
 
 }

@@ -3,6 +3,7 @@ package edu.rosehulman.haystack;
 
 public class Event {
 	
+	private static final int MAX_DESC_LENGTH = 40;
 	private String mTitle;
 	private int mStartHour;
 	private int mStartMinute;
@@ -11,13 +12,14 @@ public class Event {
 	private String mLocation;
 	private String mDescription;
 	private int mEventID;
-	
+
 	public Event(){
-		mTitle = "woohoo";
+		mTitle = "Action Center Plaza";
 		mStartHour = 8;
 		mStartMinute = 30;
 		mEndHour = 11;
 		mEndMinute = 0;
+		mDescription = "Free Drinks on Tuesdays!";
 	}
 
 	public String getTitle() {
@@ -25,11 +27,22 @@ public class Event {
 	}
 
 	public String getStartTime() {
-		return (mStartHour%12 != 0 ? mStartHour%12 : 12) + ":" + (mStartMinute<10 ? "0"+mStartMinute : mStartMinute) + " " + (mStartHour/12 == 1 ? "p.m." : "a.m.");
+		return convertTime(mStartHour, mStartMinute);
 	}
 	
 	public String getEndTime() {
-		return (mEndHour%12 != 0 ? mEndHour%12 : 12) + ":" + (mEndMinute<10 ? "0"+mEndMinute : mEndMinute) + " " + (mEndHour/12 == 1 ? "p.m." : "a.m.");
+		return convertTime(mEndHour, mEndMinute);
+	}
+	
+	private String convertTime(int hour, int minute){
+		return (hour%12 != 0 ? hour%12 : 12) + ":" + (minute<10 ? "0"+minute : minute) + " " + (hour/12 == 1 ? "PM" : "AM");
+	}
+
+	public String getShortDescription() {
+		if(mDescription.length() > MAX_DESC_LENGTH){
+			return mDescription.substring(0, MAX_DESC_LENGTH) + "...";
+		}
+		return mDescription.substring(0, mDescription.length());
 	}
 
 }
