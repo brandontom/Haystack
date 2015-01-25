@@ -45,4 +45,8 @@ public class Event {
 		return mDescription.substring(0, mDescription.length());
 	}
 
+	public int getId() {
+		return mEventID;
+	}
+
 }

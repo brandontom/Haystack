@@ -18,6 +18,7 @@
     <string name="event_title">Action Center</string>
     <string name="event_description">Half-off drinks on tuesdays</string>
     <string name="like_event">Like this event</string>
+    <string name="event_name">Launch Event</string>
 
     <string-array name="sort_spinner_array">
         <item>Featured</item>

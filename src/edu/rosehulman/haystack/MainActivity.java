@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -20,7 +21,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements SideSwipeFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements
+		SideSwipeFragment.NavigationDrawerCallbacks {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -28,6 +30,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	 */
 	private SideSwipeFragment mNavigationDrawerFragment;
 
+	public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
+	
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
@@ -42,8 +46,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager().findFragmentById(
-				R.id.navigation_drawer);
+		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager()
+				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -88,9 +92,12 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(MainActivity.this, "You pressed " + adapter.getItem(position),
-						Toast.LENGTH_SHORT).show();
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent eventIntent = new Intent(MainActivity.this,
+						EventActivity.class);
+				eventIntent.putExtra(KEY_EVENT_ID, ((Event) adapter.getItem(position)).getId());
+				startActivity(eventIntent);
 			}
 		});
 	}
@@ -108,8 +115,10 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.container,
+						PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	public void onSectionAttached(int number) {
@@ -185,14 +194,16 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
 			return rootView;
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+			((MainActivity) activity).onSectionAttached(getArguments().getInt(
+					ARG_SECTION_NUMBER));
 		}
 	}
 
