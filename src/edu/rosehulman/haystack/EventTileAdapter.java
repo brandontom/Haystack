@@ -48,8 +48,9 @@ public class EventTileAdapter extends BaseAdapter {
 		// Fill the view with data
 		Event event = (Event) getItem(position);
 
-		view.setLeftText(event.getTitle());
-		view.setRightText(event.getStartTime() + " - " + event.getEndTime());
+		view.setTitleText(event.getTitle());
+		view.setTimeText(event.getStartTime() + " - " + event.getEndTime());
+		view.setDescriptionText(event.getShortDescription());
 		return view;
 	}
 
