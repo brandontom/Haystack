@@ -1,6 +1,5 @@
 package edu.rosehulman.haystack;
 
-import android.text.format.Time;
 
 public class Event {
 	
