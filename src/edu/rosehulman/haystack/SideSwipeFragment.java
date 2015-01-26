@@ -1,15 +1,16 @@
 package edu.rosehulman.haystack;
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -70,22 +70,17 @@ public class SideSwipeFragment extends Fragment {
 		// Read in the flag indicating whether or not the user has demonstrated
 		// awareness of the
 		// drawer. See PREF_USER_LEARNED_DRAWER for details.
-		SharedPreferences sp = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
 		if (savedInstanceState != null) {
-			mCurrentSelectedPosition = savedInstanceState
-					.getInt(STATE_SELECTED_POSITION);
+			mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
 			mFromSavedInstanceState = true;
 		}
 
-		mCategories = new String[] {
-				getString(R.string.title_section1),
-				getString(R.string.title_section2),
-				getString(R.string.title_section3),
-				getString(R.string.post_new_event)};
-		
+		mCategories = new String[] { getString(R.string.title_section1),
+				getString(R.string.title_section2), getString(R.string.title_section3),
+				getString(R.string.post_new_event) };
 
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
@@ -110,7 +105,8 @@ public class SideSwipeFragment extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						selectItem(position);
+						Intent postNewEvent = new Intent(getActivity(), PostNewEventActivity.class);
+						startActivity(postNewEvent);
 					}
 				});
 
@@ -123,8 +119,7 @@ public class SideSwipeFragment extends Fragment {
 	}
 
 	public boolean isDrawerOpen() {
-		return mDrawerLayout != null
-				&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
 	}
 
 	/**
@@ -142,8 +137,7 @@ public class SideSwipeFragment extends Fragment {
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
 		ActionBar actionBar = getActionBar();
@@ -189,8 +183,7 @@ public class SideSwipeFragment extends Fragment {
 					mUserLearnedDrawer = true;
 					SharedPreferences sp = PreferenceManager
 							.getDefaultSharedPreferences(getActivity());
-					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true)
-							.apply();
+					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
 				}
 
 				getActivity().invalidateOptionsMenu(); // calls
@@ -235,8 +228,7 @@ public class SideSwipeFragment extends Fragment {
 		try {
 			mCallbacks = (NavigationDrawerCallbacks) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(
-					"Activity must implement NavigationDrawerCallbacks.");
+			throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
 		}
 	}
 
