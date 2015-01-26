@@ -6,24 +6,103 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/events_for"
+        android:id="@+id/event_activity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/events_for"
-        android:textSize="20sp" />
+        android:layout_toLeftOf="@+id/event_activity_rating"
+        android:paddingLeft="10dp"
+        android:text="@string/event_title"
+        android:textSize="40sp" />
 
     <ImageView
-        android:id="@+id/event_rating"
-        android:layout_width="fill_parent"
+        android:id="@+id/event_activity_rating"
+        android:layout_width="@dimen/rating_dimen"
         android:layout_height="@dimen/rating_dimen"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
         android:contentDescription="@string/like_event"
+        android:paddingLeft="10dp"
         android:src="@android:drawable/btn_star_big_on" />
 
+    <TextView
+        android:id="@+id/event_activity_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_activity_title"
+        android:paddingLeft="10dp"
+        android:text="@string/event_description"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/event_activity_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_activity_description"
+        android:paddingLeft="10dp"
+        android:text="@string/event_time"
+        android:textSize="15sp" />
+
+    <View
+        android:id="@+id/dividor1"
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/event_activity_time"
+        android:background="@color/Gray" />
+
+    <TextView
+        android:id="@+id/event_activity_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividor1"
+        android:paddingLeft="10dp"
+        android:text="@string/event_address"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/dividor2"
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/event_activity_address"
+        android:background="@color/Gray" />
+
+    <TextView
+        android:id="@+id/event_activity_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividor2"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="10dp"
+        android:text="@string/comments"
+        android:textSize="25sp" />
+
     <ListView
-        android:id="@+id/main_activity_list_view"
+        android:id="@+id/event_activity_comment_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/event_activity_edit_comment"
+        android:layout_below="@+id/event_activity_comments"
         android:scrollbars="vertical" >
     </ListView>
+
+    <EditText
+        android:id="@+id/event_activity_edit_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/event_activity_send_comment"
+        android:ems="10"
+        android:hint="@string/comment_hint"
+        android:inputType="text" >
+    </EditText>
+
+    <Button
+        android:id="@+id/event_activity_send_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/event_activity_comment_listview"
+        android:text="@string/send" />
 
 </RelativeLayout>

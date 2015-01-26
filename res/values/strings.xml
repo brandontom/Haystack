@@ -19,6 +19,11 @@
     <string name="event_description">Half-off drinks on tuesdays</string>
     <string name="like_event">Like this event</string>
     <string name="event_name">Launch Event</string>
+    <string name="comments">Comments</string>
+    <string name="comment_hint">Comment\.\.\.</string>
+    <string name="send">Send</string>
+    <string name="event_address">5500 Wabash Ave Terre Haute, IN 47803</string>
+    <string name="title_activity_post_new_event">Post New Event</string>
 
     <string-array name="sort_spinner_array">
         <item>Featured</item>
@@ -27,7 +32,5 @@
         <item>Today</item>
     </string-array>
 
-    <string name="title_activity_post_new_event">PostNewEventActivity</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>
