@@ -23,7 +23,20 @@
     <string name="comment_hint">Comment\.\.\.</string>
     <string name="send">Send</string>
     <string name="event_address">5500 Wabash Ave Terre Haute, IN 47803</string>
+    
     <string name="title_activity_post_new_event">Post New Event</string>
+    <string name="title_text">Title</string>
+    <string name="title_edittext_hint">Tab to enter title</string>
+    <string name="date_text">Date</string>
+    <string name="from_text">From</string>
+    <string name="to_text">To</string>
+    <string name="repeat_text">Repeat</string>
+    <string name="category_text">Category</string>
+    <string name="location_text">Location</string>
+    <string name="description_text">Description</string>
+    <string name="description_edittext_hint">Tap to enter description</string>
+    
+    
 
     <string-array name="sort_spinner_array">
         <item>Featured</item>
