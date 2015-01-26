@@ -3,6 +3,8 @@
     android:id="@+id/event_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
     <TextView
@@ -18,8 +20,8 @@
         android:id="@+id/event_activity_rating"
         android:layout_width="@dimen/rating_dimen"
         android:layout_height="@dimen/rating_dimen"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:contentDescription="@string/like_event"
         android:paddingLeft="10dp"
         android:src="@android:drawable/btn_star_big_on" />
