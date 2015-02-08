@@ -15,6 +15,7 @@ public class Event {
 	private String mDescription;
 	private int mEventID;
 	private int mUpvotes;
+	private String mCategory;
 	private ArrayList<Comment> mComments;
 
 	public Event(){
@@ -74,6 +75,14 @@ public class Event {
 
 	public int getUpvotes() {
 		return mUpvotes;
+	}
+
+	public String getCategory() {
+		return mCategory;
+	}
+
+	public void setCategory(String mCategory) {
+		this.mCategory = mCategory;
 	}
 
 }

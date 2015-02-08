@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ public class PostNewEventActivity extends Activity {
 	EditText description;
 	Button postButton;
 	Button cancelButton;
+	Spinner mCategorySpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,16 @@ public class PostNewEventActivity extends Activity {
 				finish();
 			}
 		});
+		
+		mCategorySpinner = (Spinner) findViewById(R.id.post_category_spinner);
+		
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.category_spinner_array, android.R.layout.simple_spinner_item);
+
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		mCategorySpinner.setAdapter(arraySpinnerAdapter);
+
 	}
 
 	public static class TimePickerFragment extends DialogFragment implements
