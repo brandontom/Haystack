@@ -86,24 +86,24 @@ public class PostNewEventActivity extends Activity {
 
 		address = (EditText) findViewById(R.id.edit_address);
 		description = (EditText) findViewById(R.id.edit_description);
-		
+
 		postButton = (Button) findViewById(R.id.post_button);
 		postButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		cancelButton = (Button) findViewById(R.id.cancel_button);
 		cancelButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}

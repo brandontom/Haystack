@@ -1,5 +1,7 @@
 package edu.rosehulman.haystack;
 
+import java.util.ArrayList;
+
 
 public class Event {
 	
@@ -12,6 +14,8 @@ public class Event {
 	private String mAddress;
 	private String mDescription;
 	private int mEventID;
+	private int mUpvotes;
+	private ArrayList<Comment> mComments;
 
 	public Event(){
 		mTitle = "Action Center Plaza";
@@ -21,6 +25,8 @@ public class Event {
 		mEndMinute = 0;
 		mDescription = "Free Drinks on Tuesdays!";
 		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
+		mUpvotes = 0;
+		mComments = new ArrayList<Comment>();
 	}
 
 	public String getTitle() {
@@ -56,6 +62,18 @@ public class Event {
 
 	public CharSequence getFullDescription() {
 		return mDescription;
+	}
+
+	public ArrayList<Comment> getComments() {
+		return mComments;
+	}
+
+	public boolean addComment(String comment) {
+		return mComments.add(new Comment(comment));
+	}
+
+	public int getUpvotes() {
+		return mUpvotes;
 	}
 
 }
