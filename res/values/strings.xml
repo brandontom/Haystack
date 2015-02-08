@@ -35,6 +35,7 @@
     <string name="location_text">Location</string>
     <string name="description_text">Description</string>
     <string name="description_edittext_hint">Tap to enter description</string>
+    <string name="comment_sent">Comment sent</string>
     
     
 
