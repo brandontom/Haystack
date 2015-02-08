@@ -35,8 +35,10 @@
     <string name="location_text">Location</string>
     <string name="description_text">Description</string>
     <string name="description_edittext_hint">Tap to enter description</string>
-    
-    
+    <string name="date_picker">Pick a Date</string>
+    <string name="time_picker">Time</string>
+    <string name="address_edittext_hint">Tap to enter address</string>
+    <string name="post_button_text">Post</string>
 
     <string-array name="sort_spinner_array">
         <item>Featured</item>
