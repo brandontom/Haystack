@@ -104,11 +104,18 @@
                 android:text="@string/time_picker" />
         </LinearLayout>
         
-        
+		<TextView
+            android:id="@+id/category_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/category_text"
+            android:textSize="30sp" />
         <Spinner
             android:id="@+id/post_category_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <View
             android:id="@+id/view2"
