@@ -1,5 +1,6 @@
 package edu.rosehulman.haystack;
 
+import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
@@ -9,8 +10,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -21,18 +24,24 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.appspot.tombn_songm_haystack.haystack.Haystack;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.json.gson.GsonFactory;
+
 public class PostNewEventActivity extends Activity {
 
-	EditText title;
-	Button fromTimePicker;
-	Button fromDatePicker;
-	Button toTimePicker;
-	Button toDatePicker;
-	EditText address;
-	EditText description;
-	Button postButton;
-	Button cancelButton;
-	Spinner mCategorySpinner;
+	private EditText title;
+	private Button fromTimePicker;
+	private Button fromDatePicker;
+	private Button toTimePicker;
+	private Button toDatePicker;
+	private EditText address;
+	private EditText description;
+	private Button postButton;
+	private Button cancelButton;
+	private Spinner mCategorySpinner;
+	private Haystack mService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +105,17 @@ public class PostNewEventActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				DbEvent dbevent = new DbEvent();
+				dbevent.setAddress(address.getText().toString());
+				// dbevent.getCategory()
+				dbevent.setDescription(description.getText().toString());
+				dbevent.setTitle(title.getText().toString());
+				// dbevent.setFromDateTime(fromDateTime)
+				// dbevent.setToDateTime(toDateTime)
 
+				new InsertEventTask().execute(dbevent);
+				// need update
+				finish();
 			}
 		});
 
@@ -108,15 +127,17 @@ public class PostNewEventActivity extends Activity {
 				finish();
 			}
 		});
-		
+
 		mCategorySpinner = (Spinner) findViewById(R.id.post_category_spinner);
-		
+
 		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.category_spinner_array, android.R.layout.simple_spinner_item);
 
 		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mCategorySpinner.setAdapter(arraySpinnerAdapter);
+
+		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
 
 	}
 
@@ -183,8 +204,33 @@ public class PostNewEventActivity extends Activity {
 	}
 
 	private void showDatePickerDialog() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		DialogFragment df = new DatePickerFragment();
 		df.show(getFragmentManager(), "");
+	}
+
+	class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
+
+		@Override
+		protected DbEvent doInBackground(DbEvent... params) {
+			// Auto-generated method stub
+			DbEvent event = null;
+			try {
+				event = mService.dbevent().insert(params[0]).execute();
+			} catch (IOException e) {
+
+			}
+			return event;
+		}
+
+		@Override
+		protected void onPostExecute(DbEvent result) {
+			super.onPostExecute(result);
+			if (result == null) {
+				Log.e(MainActivity.HS, "Failed inserting");
+				return;
+			}
+		}
+
 	}
 }
