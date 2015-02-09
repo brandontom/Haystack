@@ -2,6 +2,8 @@ package edu.rosehulman.haystack;
 
 import java.util.ArrayList;
 
+import com.google.api.client.util.DateTime;
+
 
 public class Event {
 	
@@ -13,10 +15,11 @@ public class Event {
 	private int mEndMinute;
 	private String mAddress;
 	private String mDescription;
-	private int mEventID;
+	private String mEventID;
 	private int mUpvotes;
 	private String mCategory;
 	private ArrayList<Comment> mComments;
+	private String mLastModified;
 
 	public Event(){
 		mTitle = "Action Center Plaza";
@@ -30,6 +33,30 @@ public class Event {
 		mComments = new ArrayList<Comment>();
 	}
 
+	public Event(String title, String address, String toDateTime,
+			String fromDateTime, String entityKey, String description,
+			String lastTouchDateTime) {
+		mTitle = title;
+		mAddress = address;
+		mEventID = entityKey;
+		mDescription = description;
+		mLastModified = lastTouchDateTime;
+		mUpvotes = 0;
+		mComments = new ArrayList<Comment>();
+		
+		//TODO fix this to parse from string google gives us
+		mStartHour = 8;
+		mStartMinute = 30;
+		mEndHour = 11;
+		mEndMinute = 0;
+//		String[] ar = fromDateTime.split(":");
+//		mStartMinute = Integer.parseInt(ar[1]);
+//		mStartHour = Integer.parseInt(ar[0].substring(ar[0].length()-2, ar[0].length()));
+//		ar = toDateTime.split(":");
+//		mEndMinute = Integer.parseInt(ar[1]);
+//		mEndHour = Integer.parseInt(ar[0].substring(ar[0].length()-2, ar[0].length()));
+	}
+
 	public String getTitle() {
 		return mTitle;
 	}
@@ -37,7 +64,7 @@ public class Event {
 	public String getStartTime() {
 		return convertTime(mStartHour, mStartMinute);
 	}
-	
+
 	public String getEndTime() {
 		return convertTime(mEndHour, mEndMinute);
 	}
@@ -47,13 +74,16 @@ public class Event {
 	}
 
 	public String getShortDescription() {
+		if(mDescription == null){
+			return "No Description";
+		}
 		if(mDescription.length() > MAX_DESC_LENGTH){
 			return mDescription.substring(0, MAX_DESC_LENGTH) + "...";
 		}
 		return mDescription.substring(0, mDescription.length());
 	}
 
-	public int getId() {
+	public String getId() {
 		return mEventID;
 	}
 

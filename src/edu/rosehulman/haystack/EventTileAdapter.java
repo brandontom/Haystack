@@ -11,12 +11,13 @@ import android.widget.Toast;
 
 public class EventTileAdapter extends BaseAdapter {
 	private Context mContext;
-	private int mNumRows = 5;
+	private int mNumRows;
 	private ArrayList<Event> mEvents;
 
 	public EventTileAdapter(Context context, ArrayList<Event> events) {
 		mContext = context;
 		mEvents = events;
+		mNumRows = events.size();
 	}
 
 	public void addView() {

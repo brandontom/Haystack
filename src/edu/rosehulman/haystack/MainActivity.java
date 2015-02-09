@@ -1,14 +1,25 @@
 package edu.rosehulman.haystack;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import com.appspot.tombn_songm_haystack.haystack.Haystack;
+import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.json.gson.GsonFactory;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +41,11 @@ public class MainActivity extends Activity implements
 	private SideSwipeFragment mNavigationDrawerFragment;
 
 	public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
+
+	public static final String MQ = "MQ";
 	
+	public static ArrayList<Event> mEvents = new ArrayList<Event>();
+
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
@@ -40,10 +55,15 @@ public class MainActivity extends Activity implements
 	 */
 	private CharSequence mTitle;
 
+	private Haystack mService;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		mService = new Haystack(AndroidHttp.newCompatibleTransport(),
+				new GsonFactory(), null);
 
 		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
@@ -59,32 +79,37 @@ public class MainActivity extends Activity implements
 		mTimeSpinner = (Spinner) findViewById(R.id.time_spinner);
 
 		setUpSpinners();
-
-		setUpListView();
+		updateEvents();
 	}
 
 	private void setUpSpinners() {
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
+				.createFromResource(this, R.array.sort_spinner_array,
+						android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
 
-		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter
+				.createFromResource(this, R.array.time_spinner_array,
+						android.R.layout.simple_spinner_item);
 
-		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		timeSpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mTimeSpinner.setAdapter(timeSpinnerAdapter);
 
 	}
 
-	private void setUpListView() {
-		ArrayList<Event> events = new ArrayList<Event>();
-		populateEvents(events);
-
-		final EventTileAdapter adapter = new EventTileAdapter(this, events);
+	private void setUpListView(java.util.List<DbEvent> list) {
+		mEvents = new ArrayList<Event>();
+		for(DbEvent event : list){
+			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(), event.getFromDateTime(), event.getEntityKey(), event.getDescription(), event.getLastTouchDateTime());
+			mEvents.add(temp);
+		}
+		final EventTileAdapter adapter = new EventTileAdapter(this, mEvents);
 
 		mListView.setAdapter(adapter);
 
@@ -95,19 +120,14 @@ public class MainActivity extends Activity implements
 					int position, long id) {
 				Intent eventIntent = new Intent(MainActivity.this,
 						EventActivity.class);
-				eventIntent.putExtra(KEY_EVENT_ID, ((Event) adapter.getItem(position)).getId());
+				eventIntent.putExtra(KEY_EVENT_ID, position);
 				startActivity(eventIntent);
 			}
 		});
 	}
 
-	private void populateEvents(ArrayList<Event> events) {
-		events.add(new Event());
-		events.add(new Event());
-		events.add(new Event());
-		events.add(new Event());
-		events.add(new Event());
-		events.add(new Event());
+	private void updateEvents() {
+		(new QueryForEventsTask()).execute();
 	}
 
 	@Override
@@ -121,11 +141,12 @@ public class MainActivity extends Activity implements
 	}
 
 	public void onSectionAttached(int number) {
-		String[] categories = getResources().getStringArray(R.array.category_spinner_array);
-		if(number == 1){
+		String[] categories = getResources().getStringArray(
+				R.array.category_spinner_array);
+		if (number == 1) {
 			mTitle = getString(R.string.all);
-		}else{
-			mTitle = categories[number-2];
+		} else {
+			mTitle = categories[number - 2];
 		}
 	}
 
@@ -199,6 +220,48 @@ public class MainActivity extends Activity implements
 			((MainActivity) activity).onSectionAttached(getArguments().getInt(
 					ARG_SECTION_NUMBER));
 		}
+	}
+
+	class QueryForEventsTask extends
+			AsyncTask<Void, Void, DbEventCollection> {
+		private ProgressDialog myProgressDialog;
+
+		@Override
+		protected void onPreExecute() {// set up a progress dialog notifying the
+										// user the task is running
+			myProgressDialog = new ProgressDialog(MainActivity.this);
+			myProgressDialog.setMessage("Getting Events...");
+			myProgressDialog.show();
+			super.onPreExecute();
+		}
+
+		@Override
+		protected DbEventCollection doInBackground(Void... params) {
+			DbEventCollection quotes = null;
+			try {
+				List query = mService.dbevent().list();
+				query.setOrder("-last_touch_date_time");
+				query.setLimit(50L);
+				quotes = query.execute();
+			} catch (IOException e) {
+				Log.e(MQ, "Failed loading " + e);
+			}
+			return quotes;
+		}
+
+		@Override
+		protected void onPostExecute(DbEventCollection result) {
+			super.onPostExecute(result);
+
+			if (result == null || result.getItems() == null) {
+				Log.e(MQ, "Result is null. Failed loading.");
+				return;
+			}
+			// result.getItems() could be null
+			setUpListView(result.getItems());
+			myProgressDialog.dismiss();
+		}
+
 	}
 
 }

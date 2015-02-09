@@ -14,6 +14,7 @@
         android:layout_toLeftOf="@+id/event_activity_rating"
         android:paddingLeft="10dp"
         android:text="@string/event_title"
+        android:gravity="left"
         android:textSize="40sp" />
 
     <ImageView

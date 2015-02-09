@@ -30,9 +30,9 @@ public class EventActivity extends Activity {
 		setContentView(R.layout.activity_event);
 		Intent intent = getIntent();
 
-		int eventId = intent.getIntExtra(MainActivity.KEY_EVENT_ID, 0);
+		int pos = intent.getIntExtra(MainActivity.KEY_EVENT_ID, 0);
 
-		mEvent = getEventById(eventId);
+		mEvent = getEventByPosition(pos);
 
 		TextView address = (TextView) findViewById(R.id.event_activity_address);
 		TextView title = (TextView) findViewById(R.id.event_activity_title);
@@ -60,16 +60,16 @@ public class EventActivity extends Activity {
 		});
 	}
 
+	private Event getEventByPosition(int pos) {
+		return MainActivity.mEvents.get(pos);
+	}
+
 	private void addComment(String text) {
 		mEvent.addComment(text);
 		mAdapter.addView();
 		mAdapter.notifyDataSetChanged();
 		mComment.setText("");
 		Toast.makeText(this, getResources().getString(R.string.comment_sent), Toast.LENGTH_SHORT).show();
-	}
-
-	private Event getEventById(int eventId) {
-		return new Event();
 	}
 
 	private void setUpListView() {
