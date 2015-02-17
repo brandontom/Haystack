@@ -141,13 +141,15 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 			String mFromDateTime = event.getFromDateTime();
-
+			String mToDateTime = event.getToDateTime();
 			GregorianCalendar mFromCalendar = new GregorianCalendar();
+			GregorianCalendar mToCalendar = new GregorianCalendar();
 
 			try {
 				Date fromDate = sdf.parse(mFromDateTime);
-
+				Date toDate = sdf.parse(mToDateTime);
 				mFromCalendar.setTime(fromDate);
+				mToCalendar.setTime(toDate);
 
 			} catch (ParseException e) {
 				// Auto-generated catch block
@@ -155,7 +157,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			}
 			// only add events if they are the correct
 
-			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
+			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
+					|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
 
 				if (timeSpinnerChoiceNum == 0) {
 
@@ -163,24 +166,30 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				} else if (timeSpinnerChoiceNum == 1) {
 					// TODAY
 					current.add(Calendar.DATE, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 2) {
 					// This week
 					current.add(Calendar.WEEK_OF_YEAR, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 3) {
 					// This month
 					current.add(Calendar.MONTH, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else {
 					Log.d("MIN", "timespinnerchoicenum out of bounds");
 				}
+			}else if((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
+							.getTimeInMillis() <= current.getTimeInMillis())){
+				addDbEvent(event);
 			}
 
 		}
@@ -256,7 +265,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
-		}else if(id == R.id.update_events){
+		} else if (id == R.id.update_events) {
 			updateEvents();
 		}
 		return super.onOptionsItemSelected(item);
@@ -340,7 +349,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		}
 
 	}
-	
+
 	@Override
 	protected void onResume() {
 		mNavigationDrawerFragment.mDrawerLayout.closeDrawers();
