@@ -60,7 +60,7 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showTimePickerDialog(fromTimePicker);
+				showTimePickerDialog(fromTimePicker, fromCal);
 			}
 
 		});
@@ -72,14 +72,15 @@ public class PostNewEventActivity extends Activity {
 		// fromTimePicker.setText(sdf.format(cal.getTime()));
 
 		fromDatePicker = (Button) findViewById(R.id.from_date_button);
-		fromDatePicker.setText(1+fromCal.get(Calendar.MONTH) + "/"
-				+ fromCal.get(Calendar.DATE) + "/"
-				+ fromCal.get(Calendar.YEAR));
+		fromDatePicker
+				.setText(1 + fromCal.get(Calendar.MONTH) + "/"
+						+ fromCal.get(Calendar.DATE) + "/"
+						+ fromCal.get(Calendar.YEAR));
 		fromDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				showDatePickerDialog(fromDatePicker);
+				showDatePickerDialog(fromDatePicker, fromCal);
 			}
 
 		});
@@ -91,19 +92,19 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showTimePickerDialog(toTimePicker);
+				showTimePickerDialog(toTimePicker, toCal);
 			}
 
 		});
 
 		toDatePicker = (Button) findViewById(R.id.to_date_button);
-		toDatePicker.setText(1+toCal.get(Calendar.MONTH) + "/"
+		toDatePicker.setText(1 + toCal.get(Calendar.MONTH) + "/"
 				+ toCal.get(Calendar.DATE) + "/" + toCal.get(Calendar.YEAR));
 		toDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				showDatePickerDialog(toDatePicker);
+				showDatePickerDialog(toDatePicker, toCal);
 			}
 
 		});
@@ -119,9 +120,7 @@ public class PostNewEventActivity extends Activity {
 				if (fromCal.getTimeInMillis() >= toCal.getTimeInMillis()) {
 					Toast.makeText(
 							PostNewEventActivity.this,
-							"End time must be set for date after start of event."
-									+ fromCal.getTime()
-									+ toCal.getTimeInMillis(),
+							"End time must be set for after the start of the event.",
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -139,7 +138,7 @@ public class PostNewEventActivity extends Activity {
 				Log.d("MFDSKFL", "" + fromCal.getTime());
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 				dbevent.setToDateTime(sdf.format(toCal.getTime()));
-				
+
 				new InsertEventTask().execute(dbevent);
 				// need update
 				finish();
@@ -172,9 +171,10 @@ public class PostNewEventActivity extends Activity {
 			TimePickerDialog.OnTimeSetListener {
 
 		private Button mButton;
+		private GregorianCalendar mCal;
 
-		public TimePickerFragment(Button button) {
-			//
+		public TimePickerFragment(Button button, GregorianCalendar cal) {
+			mCal = cal;
 			mButton = button;
 		}
 
@@ -182,9 +182,8 @@ public class PostNewEventActivity extends Activity {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current time as the default values for the picker
 
-			final Calendar c = Calendar.getInstance();
-			int hour = c.get(Calendar.HOUR_OF_DAY);
-			int minute = c.get(Calendar.MINUTE);
+			int hour = mCal.get(Calendar.HOUR_OF_DAY);
+			int minute = mCal.get(Calendar.MINUTE);
 
 			// Create a new instance of TimePickerDialog and return it
 			return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -195,25 +194,15 @@ public class PostNewEventActivity extends Activity {
 		public void onTimeSet(TimePicker view, final int hourOfDay,
 				final int minute) {
 			// Do something with the time chosen by the user
-
-			if (mButton.getId() == R.id.from_time_button) {
-				fromCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				fromCal.set(Calendar.MINUTE, minute);
-
-			} else if (mButton.getId() == R.id.to_time_button) {
-				toCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				toCal.set(Calendar.MINUTE, minute);
-
-			} else {
-				Log.d("MIN", "timepicker id is wrong ");
-			}
+			mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			mCal.set(Calendar.MINUTE, minute);
 			mButton.setText(Event.convertTime(hourOfDay, minute));
 
 		}
 	}
 
-	private void showTimePickerDialog(Button button) {
-		DialogFragment df = new TimePickerFragment(button);
+	private void showTimePickerDialog(Button button, GregorianCalendar cal) {
+		DialogFragment df = new TimePickerFragment(button, cal);
 
 		df.show(getFragmentManager(), "");
 
@@ -223,19 +212,20 @@ public class PostNewEventActivity extends Activity {
 			DatePickerDialog.OnDateSetListener {
 
 		private Button mButton;
+		private GregorianCalendar mCal;
 
-		public DatePickerFragment(Button button) {
-			//
+		public DatePickerFragment(Button button, GregorianCalendar cal) {
 			mButton = button;
+			mCal = cal;
 		}
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the default date in the picker
 			final Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH+1);
-			int day = c.get(Calendar.DAY_OF_MONTH);
+			int year = mCal.get(Calendar.YEAR);
+			int month = mCal.get(Calendar.MONTH + 1);
+			int day = mCal.get(Calendar.DAY_OF_MONTH);
 
 			// Create a new instance of DatePickerDialog and return it
 			return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -245,25 +235,16 @@ public class PostNewEventActivity extends Activity {
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			// Do something with the date chosen by the user
 
-			if (mButton.getId() == R.id.from_date_button) {
-				fromCal.set(Calendar.YEAR, year);
-				fromCal.set(Calendar.MONTH, month);
-				fromCal.set(Calendar.DATE, day);
-
-			} else if (mButton.getId() == R.id.to_date_button) {
-				toCal.set(Calendar.YEAR, year);
-				toCal.set(Calendar.MONTH, month);
-				toCal.set(Calendar.DATE, day);
-			} else {
-				Log.d("MIN", "datepicker id is wrong");
-			}
+			mCal.set(Calendar.YEAR, year);
+			mCal.set(Calendar.MONTH, month);
+			mCal.set(Calendar.DATE, day);
 			mButton.setText(month + "/" + day + "/" + year);
 		}
 	}
 
-	private void showDatePickerDialog(Button button) {
+	private void showDatePickerDialog(Button button, GregorianCalendar cal) {
 		// Auto-generated method stub
-		DialogFragment df = new DatePickerFragment(button);
+		DialogFragment df = new DatePickerFragment(button, cal);
 		df.show(getFragmentManager(), "");
 	}
 
