@@ -44,6 +44,8 @@ public class MainActivity extends Activity implements
 
 	public static final String MQ = "MQ";
 
+	public static final String HS = "HS";
+	
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
 
 	private ListView mListView;
@@ -246,7 +248,7 @@ public class MainActivity extends Activity implements
 				query.setLimit(50L);
 				quotes = query.execute();
 			} catch (IOException e) {
-				Log.e(MQ, "Failed loading " + e);
+				Log.e(HS, "Failed loading " + e);
 			}
 			return quotes;
 		}
@@ -256,7 +258,7 @@ public class MainActivity extends Activity implements
 			super.onPostExecute(result);
 
 			if (result == null || result.getItems() == null) {
-				Log.e(MQ, "Result is null. Failed loading.");
+				Log.e(HS, "Result is null. Failed loading.");
 				return;
 			}
 			// result.getItems() could be null
