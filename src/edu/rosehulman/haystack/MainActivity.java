@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
+
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -338,6 +339,12 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			myProgressDialog.dismiss();
 		}
 
+	}
+	
+	@Override
+	protected void onResume() {
+		updateEvents();
+		super.onResume();
 	}
 
 }

@@ -44,8 +44,9 @@ public class Event {
 		mToCalendar = new GregorianCalendar();
 	}
 
-	public Event(String title, String address, String toDateTime, String fromDateTime,
-			String entityKey, String description, String lastTouchDateTime, List<String> comments) {
+	public Event(String title, String address, String toDateTime,
+			String fromDateTime, String entityKey, String description,
+			String lastTouchDateTime, List<String> comments) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
@@ -75,7 +76,8 @@ public class Event {
 				mStartMinute = mFromCalendar.get(Calendar.MINUTE);
 				mEndHour = mToCalendar.get(Calendar.HOUR_OF_DAY);
 				mEndMinute = mToCalendar.get(Calendar.MINUTE);
-				Log.d("YUP", mTitle + " " + mStartMinute + " " + mEndMinute + " " + mFromDateTime);
+				Log.d("YUP", mTitle + " " + mStartMinute + " " + mEndMinute
+						+ " " + mFromDateTime);
 
 			} catch (ParseException e) {
 				// Auto-generated catch block
@@ -116,8 +118,9 @@ public class Event {
 	}
 
 	public static String convertTime(int hour, int minute) {
-		return (hour % 12 != 0 ? hour % 12 : 12) + ":" + (minute < 10 ? "0" + minute : minute)
-				+ " " + (hour / 12 == 1 ? "PM" : "AM");
+		return (hour % 12 != 0 ? hour % 12 : 12) + ":"
+				+ (minute < 10 ? "0" + minute : minute) + " "
+				+ (hour / 12 == 1 ? "PM" : "AM");
 	}
 
 	public String getShortDescription() {
@@ -164,8 +167,10 @@ public class Event {
 
 	public void setComments(List<String> comments) {
 		mComments = new ArrayList<Comment>();
-		for (String comment : comments) {
-			addComment(comment);
+		if (comments != null) {
+			for (String comment : comments) {
+				addComment(comment);
+			}
 		}
 	}
 
