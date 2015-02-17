@@ -102,10 +102,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private void setUpListView(java.util.List<DbEvent> list) {
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
-					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments());
-			mEvents.add(temp);
+			addDbEvent(event);
 			// TODO: parse dates from database
 			// SimpleDateFormat sdf = new
 			// SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
@@ -125,6 +122,13 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				startActivity(eventIntent);
 			}
 		});
+	}
+
+	public static void addDbEvent(DbEvent event) {
+		Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+				event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
+				event.getLastTouchDateTime(), event.getComments());
+		mEvents.add(temp);
 	}
 
 	private void updateEvents() {
@@ -257,12 +261,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			myProgressDialog.dismiss();
 		}
 
-	}
-	@Override
-	protected void onResume() {
-		//  Auto-generated method stub
-		updateEvents();
-		super.onResume();
 	}
 
 }

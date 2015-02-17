@@ -64,17 +64,18 @@ public class Event {
 			}
 		}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		if (mFromDateTime != null && mToDateTime != null) {
 			try {
 				Date fromDate = sdf.parse(mFromDateTime);
 				Date toDate = sdf.parse(mToDateTime);
 				mFromCalendar.setTime(fromDate);
 				mToCalendar.setTime(toDate);
-				mStartHour = mFromCalendar.get(Calendar.HOUR);
+				mStartHour = mFromCalendar.get(Calendar.HOUR_OF_DAY);
 				mStartMinute = mFromCalendar.get(Calendar.MINUTE);
-				mEndHour = mToCalendar.get(Calendar.HOUR);
+				mEndHour = mToCalendar.get(Calendar.HOUR_OF_DAY);
 				mEndMinute = mToCalendar.get(Calendar.MINUTE);
+				Log.d("YUP", mTitle + " " + mStartMinute + " " + mEndMinute + " " + mFromDateTime);
 
 			} catch (ParseException e) {
 				// Auto-generated catch block
@@ -114,8 +115,7 @@ public class Event {
 		return convertTime(mEndHour, mEndMinute);
 	}
 
-	private String convertTime(int hour, int minute) {
-
+	public static String convertTime(int hour, int minute) {
 		return (hour % 12 != 0 ? hour % 12 : 12) + ":" + (minute < 10 ? "0" + minute : minute)
 				+ " " + (hour / 12 == 1 ? "PM" : "AM");
 	}
