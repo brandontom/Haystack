@@ -50,6 +50,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
+
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
