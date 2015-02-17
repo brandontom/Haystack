@@ -1,6 +1,7 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.appspot.tombn_songm_haystack.haystack.Haystack;
@@ -113,7 +114,11 @@ public class MainActivity extends Activity implements
 					event.getEntityKey(), event.getDescription(),
 					event.getLastTouchDateTime(), event.getComments());
 			mEvents.add(temp);
+//			TODO: parse dates from database
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+//			sdf.parse(string)
 		}
+
 		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
 
 		mListView.setAdapter(adapter);

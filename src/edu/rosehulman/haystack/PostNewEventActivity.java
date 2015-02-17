@@ -2,7 +2,9 @@ package edu.rosehulman.haystack;
 
 import java.io.IOException;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -28,6 +30,7 @@ import com.appspot.tombn_songm_haystack.haystack.Haystack;
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.DateTime;
 
 public class PostNewEventActivity extends Activity {
 
@@ -42,11 +45,16 @@ public class PostNewEventActivity extends Activity {
 	private Button cancelButton;
 	private Spinner mCategorySpinner;
 	private Haystack mService;
+	private static GregorianCalendar fromCal;
+	private static GregorianCalendar toCal;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_new_event);
+
+		fromCal = new GregorianCalendar();
+		toCal = new GregorianCalendar();
 
 		title = (EditText) findViewById(R.id.edit_title);
 
@@ -104,14 +112,17 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				// Auto-generated method stub
 				DbEvent dbevent = new DbEvent();
 				dbevent.setAddress(address.getText().toString());
 				// dbevent.getCategory()
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
-				// dbevent.setFromDateTime(fromDateTime)
-				// dbevent.setToDateTime(toDateTime)
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+
+				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
+				dbevent.setToDateTime(sdf.format(fromCal.getTime()));
 
 				new InsertEventTask().execute(dbevent);
 				// need update
@@ -162,7 +173,15 @@ public class PostNewEventActivity extends Activity {
 			Context context = super.getActivity();
 			CharSequence text = "Current time is " + hourOfDay + ":" + minute;
 			int duration = Toast.LENGTH_SHORT;
-
+			if (view.getId() == R.id.from_time_button) {
+				fromCal.set(Calendar.HOUR, hourOfDay);
+				fromCal.set(Calendar.MINUTE, minute);
+			} else if (view.getId() == R.id.to_time_button) {
+				toCal.set(Calendar.HOUR, hourOfDay);
+				toCal.set(Calendar.MINUTE, minute);
+			} else {
+				Log.d("MIN", "timepicker id is wrong");
+			}
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		}
@@ -194,12 +213,24 @@ public class PostNewEventActivity extends Activity {
 			// Do something with the date chosen by the user
 			Context context = super.getActivity();
 			DateFormatSymbols date = new DateFormatSymbols();
+
 			CharSequence text = "Current date is " + date.getMonths()[month] + " " + day + ", "
 					+ year;
 			int duration = Toast.LENGTH_SHORT;
 
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
+			if (view.getId() == R.id.from_date_button) {
+				fromCal.set(Calendar.YEAR, year);
+				fromCal.set(Calendar.MONTH, month);
+				fromCal.set(Calendar.DATE, day);
+			} else if (view.getId() == R.id.from_date_button) {
+				toCal.set(Calendar.YEAR, year);
+				toCal.set(Calendar.MONTH, month);
+				toCal.set(Calendar.DATE, day);
+			} else {
+				Log.d("MIN", "datepicker id is wrong");
+			}
 		}
 	}
 
