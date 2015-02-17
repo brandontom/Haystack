@@ -3,13 +3,6 @@ package edu.rosehulman.haystack;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.appspot.tombn_songm_haystack.haystack.Haystack;
-import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -31,8 +24,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class MainActivity extends Activity implements
-		SideSwipeFragment.NavigationDrawerCallbacks {
+import com.appspot.tombn_songm_haystack.haystack.Haystack;
+import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.json.gson.GsonFactory;
+
+public class MainActivity extends Activity implements SideSwipeFragment.NavigationDrawerCallbacks {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -45,7 +44,7 @@ public class MainActivity extends Activity implements
 	public static final String MQ = "MQ";
 
 	public static final String HS = "HS";
-	
+
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
 
 	private ListView mListView;
@@ -64,11 +63,10 @@ public class MainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mService = new Haystack(AndroidHttp.newCompatibleTransport(),
-				new GsonFactory(), null);
+		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
 
-		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager()
-				.findFragmentById(R.id.navigation_drawer);
+		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager().findFragmentById(
+				R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -85,21 +83,17 @@ public class MainActivity extends Activity implements
 	}
 
 	private void setUpSpinners() {
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.sort_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
 
-		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.time_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
 
-		timeSpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mTimeSpinner.setAdapter(timeSpinnerAdapter);
 
@@ -108,14 +102,14 @@ public class MainActivity extends Activity implements
 	private void setUpListView(java.util.List<DbEvent> list) {
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			Event temp = new Event(event.getTitle(), event.getAddress(),
-					event.getToDateTime(), event.getFromDateTime(),
-					event.getEntityKey(), event.getDescription(),
+			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
 					event.getLastTouchDateTime(), event.getComments());
 			mEvents.add(temp);
-//			TODO: parse dates from database
-//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-//			sdf.parse(string)
+			// TODO: parse dates from database
+			// SimpleDateFormat sdf = new
+			// SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+			// sdf.parse(string)
 		}
 
 		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
@@ -125,10 +119,8 @@ public class MainActivity extends Activity implements
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent eventIntent = new Intent(MainActivity.this,
-						EventActivity.class);
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent eventIntent = new Intent(MainActivity.this, EventActivity.class);
 				eventIntent.putExtra(KEY_EVENT_ID, position);
 				startActivity(eventIntent);
 			}
@@ -143,15 +135,12 @@ public class MainActivity extends Activity implements
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+		fragmentManager.beginTransaction()
+				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	public void onSectionAttached(int number) {
-		String[] categories = getResources().getStringArray(
-				R.array.category_spinner_array);
+		String[] categories = getResources().getStringArray(R.array.category_spinner_array);
 		if (number == 1) {
 			mTitle = getString(R.string.all);
 		} else {
@@ -218,16 +207,14 @@ public class MainActivity extends Activity implements
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
+			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 			return rootView;
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(getArguments().getInt(
-					ARG_SECTION_NUMBER));
+			((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
 		}
 	}
 
@@ -270,6 +257,12 @@ public class MainActivity extends Activity implements
 			myProgressDialog.dismiss();
 		}
 
+	}
+	@Override
+	protected void onResume() {
+		//  Auto-generated method stub
+		updateEvents();
+		super.onResume();
 	}
 
 }

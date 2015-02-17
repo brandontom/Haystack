@@ -30,15 +30,14 @@ import com.appspot.tombn_songm_haystack.haystack.Haystack;
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.DateTime;
 
 public class PostNewEventActivity extends Activity {
 
 	private EditText title;
-	private Button fromTimePicker;
-	private Button fromDatePicker;
-	private Button toTimePicker;
-	private Button toDatePicker;
+	private static Button fromTimePicker;
+	private static Button fromDatePicker;
+	private static Button toTimePicker;
+	private static Button toDatePicker;
 	private EditText address;
 	private EditText description;
 	private Button postButton;
@@ -62,7 +61,7 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showTimePickerDialog();
+				showTimePickerDialog(fromTimePicker);
 			}
 
 		});
@@ -78,7 +77,7 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showDatePickerDialog();
+				showDatePickerDialog(fromDatePicker);
 			}
 
 		});
@@ -88,7 +87,7 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showTimePickerDialog();
+				showTimePickerDialog(toTimePicker);
 			}
 
 		});
@@ -98,7 +97,7 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				showDatePickerDialog();
+				showDatePickerDialog(toDatePicker);
 			}
 
 		});
@@ -114,7 +113,8 @@ public class PostNewEventActivity extends Activity {
 				// Auto-generated method stub
 				DbEvent dbevent = new DbEvent();
 				dbevent.setAddress(address.getText().toString());
-				// dbevent.getCategory()
+				dbevent.setCategory(mCategorySpinner.getSelectedItem().toString());
+
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
 
@@ -152,9 +152,17 @@ public class PostNewEventActivity extends Activity {
 	public static class TimePickerFragment extends DialogFragment implements
 			TimePickerDialog.OnTimeSetListener {
 
+		private Button mButton;
+
+		public TimePickerFragment(Button button) {
+			//
+			mButton = button;
+		}
+
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current time as the default values for the picker
+
 			final Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
 			int minute = c.get(Calendar.MINUTE);
@@ -164,28 +172,34 @@ public class PostNewEventActivity extends Activity {
 					DateFormat.is24HourFormat(getActivity()));
 		}
 
+		@Override
 		public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
 			// Do something with the time chosen by the user
 
 			Context context = super.getActivity();
 			CharSequence text = "Current time is " + hourOfDay + ":" + minute;
 			int duration = Toast.LENGTH_SHORT;
-			if (view.getId() == R.id.from_time_button) {
+			if (mButton.getId() == R.id.from_time_button) {
 				fromCal.set(Calendar.HOUR, hourOfDay);
 				fromCal.set(Calendar.MINUTE, minute);
-			} else if (view.getId() == R.id.to_time_button) {
+
+			} else if (mButton.getId() == R.id.to_time_button) {
 				toCal.set(Calendar.HOUR, hourOfDay);
 				toCal.set(Calendar.MINUTE, minute);
+
 			} else {
-				Log.d("MIN", "timepicker id is wrong");
+				Log.d("MIN", "timepicker id is wrong ");
 			}
+			mButton.setText(hourOfDay + " : " + minute);
+
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
+
 		}
 	}
 
-	private void showTimePickerDialog() {
-		DialogFragment df = new TimePickerFragment();
+	private void showTimePickerDialog(Button button) {
+		DialogFragment df = new TimePickerFragment(button);
 
 		df.show(getFragmentManager(), "");
 
@@ -193,6 +207,13 @@ public class PostNewEventActivity extends Activity {
 
 	public static class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
+
+		private Button mButton;
+
+		public DatePickerFragment(Button button) {
+			//
+			mButton = button;
+		}
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -206,6 +227,7 @@ public class PostNewEventActivity extends Activity {
 			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
+		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			// Do something with the date chosen by the user
 			Context context = super.getActivity();
@@ -217,23 +239,25 @@ public class PostNewEventActivity extends Activity {
 
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
-			if (view.getId() == R.id.from_date_button) {
+			if (mButton.getId() == R.id.from_date_button) {
 				fromCal.set(Calendar.YEAR, year);
 				fromCal.set(Calendar.MONTH, month);
 				fromCal.set(Calendar.DATE, day);
-			} else if (view.getId() == R.id.from_date_button) {
+
+			} else if (mButton.getId() == R.id.to_date_button) {
 				toCal.set(Calendar.YEAR, year);
 				toCal.set(Calendar.MONTH, month);
 				toCal.set(Calendar.DATE, day);
 			} else {
 				Log.d("MIN", "datepicker id is wrong");
 			}
+			mButton.setText(year + "-" + month + "-" + day);
 		}
 	}
 
-	private void showDatePickerDialog() {
+	private void showDatePickerDialog(Button button) {
 		// Auto-generated method stub
-		DialogFragment df = new DatePickerFragment();
+		DialogFragment df = new DatePickerFragment(button);
 		df.show(getFragmentManager(), "");
 	}
 

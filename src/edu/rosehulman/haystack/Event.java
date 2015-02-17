@@ -1,7 +1,14 @@
 package edu.rosehulman.haystack;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import android.util.Log;
 
 import com.google.api.client.util.DateTime;
 
@@ -12,7 +19,9 @@ public class Event {
 	private int mStartHour;
 	private int mStartMinute;
 	private String mFromDateTime;
+	private GregorianCalendar mFromCalendar;
 	private String mToDateTime;
+	private GregorianCalendar mToCalendar;
 	private int mEndHour;
 	private int mEndMinute;
 	private String mAddress;
@@ -33,17 +42,23 @@ public class Event {
 		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
 		mUpvotes = 0;
 		mComments = new ArrayList<Comment>();
+		mFromCalendar = new GregorianCalendar();
+		mToCalendar = new GregorianCalendar();
 	}
 
-	public Event(String title, String address, String toDateTime,
-			String fromDateTime, String entityKey, String description,
-			String lastTouchDateTime, List<String> comments) {
+	public Event(String title, String address, String toDateTime, String fromDateTime,
+			String entityKey, String description, String lastTouchDateTime, List<String> comments) {
+		mFromCalendar = new GregorianCalendar();
+		mToCalendar = new GregorianCalendar();
 		mTitle = title;
 		mAddress = address;
 		mEventID = entityKey;
 		mDescription = description;
 		mLastModified = lastTouchDateTime;
 		mUpvotes = 0;
+
+		mFromDateTime = fromDateTime;
+		mToDateTime = toDateTime;
 		mComments = new ArrayList<Comment>();
 		if (comments != null) {
 			for (String comment : comments) {
@@ -51,13 +66,22 @@ public class Event {
 			}
 		}
 
-		// TODO fix this to parse from string google gives us
-		mStartHour = 8;
-		mStartMinute = 30;
-		mEndHour = 11;
-		mEndMinute = 0;
-		mFromDateTime = fromDateTime;
-		mToDateTime = toDateTime;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+		try {
+			Date fromDate = sdf.parse(mFromDateTime);
+			Date toDate = sdf.parse(mToDateTime);
+			mFromCalendar.setTime(fromDate);
+			mToCalendar.setTime(toDate);
+			mStartHour = mFromCalendar.get(Calendar.HOUR);
+			mStartMinute = mFromCalendar.get(Calendar.MINUTE);
+			mEndHour = mToCalendar.get(Calendar.HOUR);
+			mEndMinute = mToCalendar.get(Calendar.MINUTE);
+
+		} catch (ParseException e) {
+			// Auto-generated catch block
+			Log.d("MIN", "parsing dates error: " + e);
+		}
+
 		// String[] ar = fromDateTime.split(":");
 		// mStartMinute = Integer.parseInt(ar[1]);
 		// mStartHour = Integer.parseInt(ar[0].substring(ar[0].length()-2,
@@ -66,6 +90,16 @@ public class Event {
 		// mEndMinute = Integer.parseInt(ar[1]);
 		// mEndHour = Integer.parseInt(ar[0].substring(ar[0].length()-2,
 		// ar[0].length()));
+
+	}
+
+	public GregorianCalendar getFromDate() {
+		return mFromCalendar;
+	}
+
+	public GregorianCalendar getToDate() {
+		return mToCalendar;
+
 	}
 
 	public String getTitle() {
@@ -73,6 +107,7 @@ public class Event {
 	}
 
 	public String getStartTime() {
+
 		return convertTime(mStartHour, mStartMinute);
 	}
 
@@ -81,9 +116,9 @@ public class Event {
 	}
 
 	private String convertTime(int hour, int minute) {
-		return (hour % 12 != 0 ? hour % 12 : 12) + ":"
-				+ (minute < 10 ? "0" + minute : minute) + " "
-				+ (hour / 12 == 1 ? "PM" : "AM");
+
+		return (hour % 12 != 0 ? hour % 12 : 12) + ":" + (minute < 10 ? "0" + minute : minute)
+				+ " " + (hour / 12 == 1 ? "PM" : "AM");
 	}
 
 	public String getShortDescription() {
