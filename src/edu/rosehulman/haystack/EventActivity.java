@@ -52,8 +52,6 @@ public class EventActivity extends Activity {
 		description.setText(mEvent.getFullDescription());
 		time.setText(mEvent.getStartTime() + " - " + mEvent.getEndTime());
 
-		setUpListView();
-
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -65,6 +63,7 @@ public class EventActivity extends Activity {
 				addComment(text);
 			}
 		});
+		updateComments();
 	}
 
 	private Event getEventByPosition(int pos) {
@@ -73,6 +72,10 @@ public class EventActivity extends Activity {
 
 	private void addComment(String text) {
 		mRecentComment = text;
+		updateComments();
+	}
+	
+	private void updateComments(){
 		(new QueryForComments()).execute(mEvent.getId());
 	}
 
