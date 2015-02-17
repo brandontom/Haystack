@@ -63,7 +63,6 @@ public class EventActivity extends Activity {
 				addComment(text);
 			}
 		});
-		updateComments();
 	}
 
 	private Event getEventByPosition(int pos) {
@@ -72,11 +71,6 @@ public class EventActivity extends Activity {
 
 	private void addComment(String text) {
 		mRecentComment = text;
-		updateComments();
-	}
-	
-	private void updateComments(){
-		(new QueryForComments()).execute(mEvent.getId());
 	}
 
 	private void setUpListView() {
