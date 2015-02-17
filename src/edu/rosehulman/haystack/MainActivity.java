@@ -1,6 +1,7 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.appspot.tombn_songm_haystack.haystack.Haystack;
@@ -108,7 +109,11 @@ public class MainActivity extends Activity implements
 		for(DbEvent event : list){
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(), event.getFromDateTime(), event.getEntityKey(), event.getDescription(), event.getLastTouchDateTime());
 			mEvents.add(temp);
+//			TODO: parse dates from database
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+//			sdf.parse(string)
 		}
+		
 		final EventTileAdapter adapter = new EventTileAdapter(this, mEvents);
 
 		mListView.setAdapter(adapter);
