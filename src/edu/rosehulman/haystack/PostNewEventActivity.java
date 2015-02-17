@@ -121,7 +121,7 @@ public class PostNewEventActivity extends Activity {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
-				dbevent.setToDateTime(sdf.format(fromCal.getTime()));
+				dbevent.setToDateTime(sdf.format(toCal.getTime()));
 
 				new InsertEventTask().execute(dbevent);
 				// need update
@@ -282,6 +282,7 @@ public class PostNewEventActivity extends Activity {
 				Log.e(MainActivity.HS, "Failed inserting");
 				return;
 			}
+
 		}
 
 	}
