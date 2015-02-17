@@ -54,9 +54,9 @@ public class SideSwipeFragment extends Fragment {
 	 */
 	private ActionBarDrawerToggle mDrawerToggle;
 
-	private DrawerLayout mDrawerLayout;
+	DrawerLayout mDrawerLayout;
 	private ListView mDrawerListView;
-	private View mFragmentContainerView;
+	View mFragmentContainerView;
 
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;

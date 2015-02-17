@@ -343,6 +343,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	
 	@Override
 	protected void onResume() {
+		mNavigationDrawerFragment.mDrawerLayout.closeDrawers();
 		updateEvents();
 		super.onResume();
 	}
