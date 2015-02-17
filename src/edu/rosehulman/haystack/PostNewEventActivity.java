@@ -247,7 +247,7 @@ public class PostNewEventActivity extends Activity {
 				fromCal.set(Calendar.MONTH, month);
 				fromCal.set(Calendar.DATE, day);
 
-			} else if (mButton.getId() == R.id.from_date_button) {
+			} else if (mButton.getId() == R.id.to_date_button) {
 				toCal.set(Calendar.YEAR, year);
 				toCal.set(Calendar.MONTH, month);
 				toCal.set(Calendar.DATE, day);
