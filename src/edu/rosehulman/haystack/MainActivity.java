@@ -338,5 +338,11 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		}
 
 	}
+	
+	@Override
+	protected void onResume() {
+		updateEvents();
+		super.onResume();
+	}
 
 }
