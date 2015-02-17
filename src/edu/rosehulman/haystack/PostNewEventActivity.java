@@ -122,7 +122,7 @@ public class PostNewEventActivity extends Activity {
 
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 				dbevent.setToDateTime(sdf.format(toCal.getTime()));
-
+				
 				new InsertEventTask().execute(dbevent);
 				// need update
 				finish();

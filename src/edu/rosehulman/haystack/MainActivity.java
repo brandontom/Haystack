@@ -1,7 +1,12 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -20,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -56,6 +62,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	 */
 	private CharSequence mTitle;
 
+	private int timeSpinnerChoiceNum;
+	// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
+
 	public static Haystack mService;
 
 	@Override
@@ -79,6 +88,13 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mTimeSpinner = (Spinner) findViewById(R.id.time_spinner);
 
 		setUpSpinners();
+
+		// :depending on spinners, change list view
+
+		// if mTimeSpinner is for all time,
+		timeSpinnerChoiceNum = mTimeSpinner.getSelectedItemPosition();
+		// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
+
 		updateEvents();
 	}
 
@@ -96,20 +112,78 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mTimeSpinner.setAdapter(timeSpinnerAdapter);
+		mTimeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// update
+				timeSpinnerChoiceNum = position;
+
+				updateEvents();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// Intentionally left empty
+
+			}
+		});
 
 	}
 
 	private void setUpListView(java.util.List<DbEvent> list) {
+		// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
+
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
-					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments());
-			mEvents.add(temp);
-			// TODO: parse dates from database
-			// SimpleDateFormat sdf = new
-			// SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-			// sdf.parse(string)
+			GregorianCalendar current = new GregorianCalendar();
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+			String mFromDateTime = event.getFromDateTime();
+
+			GregorianCalendar mFromCalendar = new GregorianCalendar();
+
+			try {
+				Date fromDate = sdf.parse(mFromDateTime);
+
+				mFromCalendar.setTime(fromDate);
+
+			} catch (ParseException e) {
+				// Auto-generated catch block
+				Log.d("MIN", "parsing dates error in MainActivity: " + e);
+			}
+			// only add events if they are the correct
+
+			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
+				Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+						event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
+						event.getLastTouchDateTime(), event.getComments());
+				if (timeSpinnerChoiceNum == 0) {
+
+					mEvents.add(temp);
+				} else if (timeSpinnerChoiceNum == 1) {
+					// TODAY
+					current.add(Calendar.DATE, 1);
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+						mEvents.add(temp);
+					}
+				} else if (timeSpinnerChoiceNum == 2) {
+					// This week
+					current.add(Calendar.WEEK_OF_YEAR, 1);
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+						mEvents.add(temp);
+					}
+				} else if (timeSpinnerChoiceNum == 3) {
+					// This month
+					current.add(Calendar.MONTH, 1);
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+						mEvents.add(temp);
+					}
+				} else {
+					Log.d("MIN", "timespinnerchoicenum out of bounds");
+				}
+			}
+
 		}
 
 		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
@@ -258,9 +332,10 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		}
 
 	}
+
 	@Override
 	protected void onResume() {
-		//  Auto-generated method stub
+		// Auto-generated method stub
 		updateEvents();
 		super.onResume();
 	}
