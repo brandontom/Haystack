@@ -1,6 +1,7 @@
 package edu.rosehulman.haystack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.api.client.util.DateTime;
 
@@ -11,6 +12,8 @@ public class Event {
 	private String mTitle;
 	private int mStartHour;
 	private int mStartMinute;
+	private String mFromDateTime;
+	private String mToDateTime;
 	private int mEndHour;
 	private int mEndMinute;
 	private String mAddress;
@@ -35,20 +38,24 @@ public class Event {
 
 	public Event(String title, String address, String toDateTime,
 			String fromDateTime, String entityKey, String description,
-			String lastTouchDateTime) {
+			String lastTouchDateTime, List<String> comments) {
 		mTitle = title;
 		mAddress = address;
 		mEventID = entityKey;
 		mDescription = description;
 		mLastModified = lastTouchDateTime;
 		mUpvotes = 0;
-		mComments = new ArrayList<Comment>();
+		for(String comment : comments){
+			mComments.add(new Comment(comment));
+		}
 		
 		//TODO fix this to parse from string google gives us
 		mStartHour = 8;
 		mStartMinute = 30;
 		mEndHour = 11;
 		mEndMinute = 0;
+		mFromDateTime = fromDateTime;
+		mToDateTime = toDateTime;
 //		String[] ar = fromDateTime.split(":");
 //		mStartMinute = Integer.parseInt(ar[1]);
 //		mStartHour = Integer.parseInt(ar[0].substring(ar[0].length()-2, ar[0].length()));

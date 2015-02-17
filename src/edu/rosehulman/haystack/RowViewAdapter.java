@@ -9,12 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class EventTileAdapter extends BaseAdapter {
+public class RowViewAdapter extends BaseAdapter {
 	private Context mContext;
 	private int mNumRows;
 	private ArrayList<Event> mEvents;
 
-	public EventTileAdapter(Context context, ArrayList<Event> events) {
+	public RowViewAdapter(Context context, ArrayList<Event> events) {
 		mContext = context;
 		mEvents = events;
 		mNumRows = events.size();

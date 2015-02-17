@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements
 	public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
 
 	public static final String MQ = "MQ";
-	
+
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
 
 	private ListView mListView;
@@ -105,11 +105,14 @@ public class MainActivity extends Activity implements
 
 	private void setUpListView(java.util.List<DbEvent> list) {
 		mEvents = new ArrayList<Event>();
-		for(DbEvent event : list){
-			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(), event.getFromDateTime(), event.getEntityKey(), event.getDescription(), event.getLastTouchDateTime());
+		for (DbEvent event : list) {
+			Event temp = new Event(event.getTitle(), event.getAddress(),
+					event.getToDateTime(), event.getFromDateTime(),
+					event.getEntityKey(), event.getDescription(),
+					event.getLastTouchDateTime(), event.getComments());
 			mEvents.add(temp);
 		}
-		final EventTileAdapter adapter = new EventTileAdapter(this, mEvents);
+		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
 
 		mListView.setAdapter(adapter);
 
@@ -222,8 +225,7 @@ public class MainActivity extends Activity implements
 		}
 	}
 
-	class QueryForEventsTask extends
-			AsyncTask<Void, Void, DbEventCollection> {
+	class QueryForEventsTask extends AsyncTask<Void, Void, DbEventCollection> {
 		private ProgressDialog myProgressDialog;
 
 		@Override
