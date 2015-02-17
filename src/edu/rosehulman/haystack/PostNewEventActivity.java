@@ -139,7 +139,7 @@ public class PostNewEventActivity extends Activity {
 				Log.d("MFDSKFL", "" + fromCal.getTime());
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 				dbevent.setToDateTime(sdf.format(toCal.getTime()));
-
+				
 				new InsertEventTask().execute(dbevent);
 				// need update
 				finish();
