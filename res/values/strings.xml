@@ -54,5 +54,6 @@
         <item>Other</item>
     </string-array>
     <string name="all">All</string>
+    <string name="brandon">BRANDON</string>
 
 </resources>

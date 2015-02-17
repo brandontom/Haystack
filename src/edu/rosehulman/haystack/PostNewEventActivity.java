@@ -44,7 +44,6 @@ public class PostNewEventActivity extends Activity {
 	private Button postButton;
 	private Button cancelButton;
 	private Spinner mCategorySpinner;
-	private Haystack mService;
 	private static GregorianCalendar fromCal;
 	private static GregorianCalendar toCal;
 
@@ -148,8 +147,6 @@ public class PostNewEventActivity extends Activity {
 
 		mCategorySpinner.setAdapter(arraySpinnerAdapter);
 
-		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
-
 	}
 
 	public static class TimePickerFragment extends DialogFragment implements
@@ -240,14 +237,14 @@ public class PostNewEventActivity extends Activity {
 		df.show(getFragmentManager(), "");
 	}
 
-	class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
+	public static class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
 
 		@Override
 		protected DbEvent doInBackground(DbEvent... params) {
 			// Auto-generated method stub
 			DbEvent event = null;
 			try {
-				event = mService.dbevent().insert(params[0]).execute();
+				event = MainActivity.mService.dbevent().insert(params[0]).execute();
 			} catch (IOException e) {
 
 			}

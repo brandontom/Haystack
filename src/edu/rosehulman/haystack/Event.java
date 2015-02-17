@@ -47,7 +47,7 @@ public class Event {
 		mComments = new ArrayList<Comment>();
 		if (comments != null) {
 			for (String comment : comments) {
-				mComments.add(new Comment(comment));
+				mComments.add(0, new Comment(comment));
 			}
 		}
 
@@ -112,8 +112,8 @@ public class Event {
 		return mComments;
 	}
 
-	public boolean addComment(String comment) {
-		return mComments.add(new Comment(comment));
+	public void addComment(String comment) {
+		mComments.add(0, new Comment(comment));
 	}
 
 	public int getUpvotes() {
@@ -126,6 +126,21 @@ public class Event {
 
 	public void setCategory(String mCategory) {
 		this.mCategory = mCategory;
+	}
+
+	public void setComments(List<String> comments) {
+		mComments = new ArrayList<Comment>();
+		for(String comment : comments){
+			addComment(comment);
+		}
+	}
+
+	public List<String> getCommentsAsList() {
+		List<String> comments = new ArrayList<String>();
+		for(Comment comment : mComments){
+			comments.add(0, comment.getComment());
+		}
+		return comments;
 	}
 
 }

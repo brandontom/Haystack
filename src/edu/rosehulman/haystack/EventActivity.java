@@ -1,14 +1,25 @@
 package edu.rosehulman.haystack;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import com.appspot.tombn_songm_haystack.haystack.Haystack;
+import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.json.gson.GsonFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.app.ActivityManager.RecentTaskInfo;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -25,6 +36,7 @@ public class EventActivity extends Activity {
 	ListView mComments;
 	CommentTileAdapter mAdapter;
 	EditText mComment;
+	String mRecentComment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,7 @@ public class EventActivity extends Activity {
 		int pos = intent.getIntExtra(MainActivity.KEY_EVENT_ID, 0);
 
 		mEvent = getEventByPosition(pos);
+		mRecentComment = null;
 
 		TextView address = (TextView) findViewById(R.id.event_activity_address);
 		TextView title = (TextView) findViewById(R.id.event_activity_title);
@@ -67,12 +80,8 @@ public class EventActivity extends Activity {
 	}
 
 	private void addComment(String text) {
-		mEvent.addComment(text);
-		mAdapter.addView();
-		mAdapter.notifyDataSetChanged();
-		mComment.setText("");
-		Toast.makeText(this, getResources().getString(R.string.comment_sent), Toast.LENGTH_SHORT).show();
-		DbEvent dbevent = new DbEvent();
+		mRecentComment = text;
+		(new QueryForComments()).execute(mEvent.getId());
 	}
 
 	private void setUpListView() {
@@ -82,6 +91,47 @@ public class EventActivity extends Activity {
 				comments);
 
 		mComments.setAdapter(mAdapter);
+	}
+	
+	class QueryForComments extends AsyncTask<String, Void, DbEventProtoComments> {
+
+		@Override
+		protected DbEventProtoComments doInBackground(String... entityKeys) {
+			DbEventProtoComments returnedQuote = null;
+			try {
+				returnedQuote = MainActivity.mService.dbevent().comments(entityKeys[0]).execute();
+			} catch (IOException e) {
+				Log.e("BRANDON", "Failed to insert quote" + e);
+			}
+			return returnedQuote;
+		}
+
+		@Override
+		protected void onPostExecute(DbEventProtoComments result) {
+			super.onPostExecute(result);
+
+			if (result == null) {
+				Log.e("BRANDON", "Result is null. Failed loading.");
+				return;
+			}
+			// result.getItems() could be null
+			mEvent.setComments(result.getComments());
+			mEvent.addComment(mRecentComment);
+			
+			DbEvent event = new DbEvent();
+			event.setEntityKey(mEvent.getId());
+			event.setComments(mEvent.getCommentsAsList());
+			
+			(new PostNewEventActivity.InsertEventTask()).execute(event);
+			mRecentComment = null;
+			mAdapter.addView();
+			mAdapter.notifyDataSetChanged();
+			mComment.setText("");
+			Toast.makeText(EventActivity.this, getResources().getString(R.string.comment_sent), Toast.LENGTH_SHORT).show();
+			setUpListView();
+			
+		}
+
 	}
 
 }

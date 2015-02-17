@@ -1,7 +1,6 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.appspot.tombn_songm_haystack.haystack.Haystack;
@@ -58,7 +57,7 @@ public class MainActivity extends Activity implements
 	 */
 	private CharSequence mTitle;
 
-	private Haystack mService;
+	public static Haystack mService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
