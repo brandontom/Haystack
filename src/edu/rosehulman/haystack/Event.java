@@ -10,8 +10,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.google.api.client.util.DateTime;
-
 public class Event {
 
 	private static final int MAX_DESC_LENGTH = 40;
@@ -107,7 +105,6 @@ public class Event {
 	}
 
 	public String getStartTime() {
-
 		return convertTime(mStartHour, mStartMinute);
 	}
 
