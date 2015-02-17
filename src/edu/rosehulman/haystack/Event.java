@@ -10,6 +10,8 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.google.api.client.util.DateTime;
+
 public class Event {
 
 	private static final int MAX_DESC_LENGTH = 40;
@@ -54,21 +56,15 @@ public class Event {
 		mDescription = description;
 		mLastModified = lastTouchDateTime;
 		mUpvotes = 0;
-		for (String comment : comments) {
-			mComments.add(new Comment(comment));
-		}
-
-		// TODO fix this to parse from string google gives us
-		// SimpleDateFormat sdf = new
-		// SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-		// sdf.parse(string)
 
 		mFromDateTime = fromDateTime;
 		mToDateTime = toDateTime;
-		mStartHour = 8;
-		mStartMinute = 30;
-		mEndHour = 11;
-		mEndMinute = 0;
+		mComments = new ArrayList<Comment>();
+		if (comments != null) {
+			for (String comment : comments) {
+				mComments.add(new Comment(comment));
+			}
+		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 		try {
@@ -85,6 +81,7 @@ public class Event {
 			// Auto-generated catch block
 			Log.d("MIN", "parsing dates error: " + e);
 		}
+
 		// String[] ar = fromDateTime.split(":");
 		// mStartMinute = Integer.parseInt(ar[1]);
 		// mStartHour = Integer.parseInt(ar[0].substring(ar[0].length()-2,
@@ -102,6 +99,7 @@ public class Event {
 
 	public GregorianCalendar getToDate() {
 		return mToCalendar;
+
 	}
 
 	public String getTitle() {
@@ -118,6 +116,7 @@ public class Event {
 	}
 
 	private String convertTime(int hour, int minute) {
+
 		return (hour % 12 != 0 ? hour % 12 : 12) + ":" + (minute < 10 ? "0" + minute : minute)
 				+ " " + (hour / 12 == 1 ? "PM" : "AM");
 	}
