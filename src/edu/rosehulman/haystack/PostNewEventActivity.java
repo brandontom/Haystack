@@ -1,7 +1,6 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -11,7 +10,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -26,10 +24,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.appspot.tombn_songm_haystack.haystack.Haystack;
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
 
 public class PostNewEventActivity extends Activity {
 
@@ -53,10 +48,14 @@ public class PostNewEventActivity extends Activity {
 
 		fromCal = new GregorianCalendar();
 		toCal = new GregorianCalendar();
+		toCal.add(Calendar.HOUR_OF_DAY, 1);
 
 		title = (EditText) findViewById(R.id.edit_title);
 
 		fromTimePicker = (Button) findViewById(R.id.from_time_button);
+		fromTimePicker
+				.setText(Event.convertTime(fromCal.get(Calendar.HOUR_OF_DAY),
+						fromCal.get(Calendar.MINUTE)));
 		fromTimePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -73,6 +72,9 @@ public class PostNewEventActivity extends Activity {
 		// fromTimePicker.setText(sdf.format(cal.getTime()));
 
 		fromDatePicker = (Button) findViewById(R.id.from_date_button);
+		fromDatePicker.setText(1+fromCal.get(Calendar.MONTH) + "/"
+				+ fromCal.get(Calendar.DATE) + "/"
+				+ fromCal.get(Calendar.YEAR));
 		fromDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -83,6 +85,8 @@ public class PostNewEventActivity extends Activity {
 		});
 
 		toTimePicker = (Button) findViewById(R.id.to_time_button);
+		toTimePicker.setText(Event.convertTime(toCal.get(Calendar.HOUR_OF_DAY),
+				toCal.get(Calendar.MINUTE)));
 		toTimePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -93,6 +97,8 @@ public class PostNewEventActivity extends Activity {
 		});
 
 		toDatePicker = (Button) findViewById(R.id.to_date_button);
+		toDatePicker.setText(1+toCal.get(Calendar.MONTH) + "/"
+				+ toCal.get(Calendar.DATE) + "/" + toCal.get(Calendar.YEAR));
 		toDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -110,16 +116,27 @@ public class PostNewEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				if (fromCal.getTimeInMillis() >= toCal.getTimeInMillis()) {
+					Toast.makeText(
+							PostNewEventActivity.this,
+							"End time must be set for date after start of event."
+									+ fromCal.getTime()
+									+ toCal.getTimeInMillis(),
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
 				// Auto-generated method stub
 				DbEvent dbevent = new DbEvent();
 				dbevent.setAddress(address.getText().toString());
-				dbevent.setCategory(mCategorySpinner.getSelectedItem().toString());
+				dbevent.setCategory(mCategorySpinner.getSelectedItem()
+						.toString());
 
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
 
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-
+				SimpleDateFormat sdf = new SimpleDateFormat(
+						"yyyy-MM-dd'T'HH:mm:ss.SSS");
+				Log.d("MFDSKFL", "" + fromCal.getTime());
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 				dbevent.setToDateTime(sdf.format(toCal.getTime()));
 				
@@ -140,10 +157,12 @@ public class PostNewEventActivity extends Activity {
 
 		mCategorySpinner = (Spinner) findViewById(R.id.post_category_spinner);
 
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.category_spinner_array, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
+				.createFromResource(this, R.array.category_spinner_array,
+						android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mCategorySpinner.setAdapter(arraySpinnerAdapter);
 
@@ -173,27 +192,22 @@ public class PostNewEventActivity extends Activity {
 		}
 
 		@Override
-		public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
+		public void onTimeSet(TimePicker view, final int hourOfDay,
+				final int minute) {
 			// Do something with the time chosen by the user
 
-			Context context = super.getActivity();
-			CharSequence text = "Current time is " + hourOfDay + ":" + minute;
-			int duration = Toast.LENGTH_SHORT;
 			if (mButton.getId() == R.id.from_time_button) {
-				fromCal.set(Calendar.HOUR, hourOfDay);
+				fromCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 				fromCal.set(Calendar.MINUTE, minute);
 
 			} else if (mButton.getId() == R.id.to_time_button) {
-				toCal.set(Calendar.HOUR, hourOfDay);
+				toCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 				toCal.set(Calendar.MINUTE, minute);
 
 			} else {
 				Log.d("MIN", "timepicker id is wrong ");
 			}
-			mButton.setText(hourOfDay + " : " + minute);
-
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
+			mButton.setText(Event.convertTime(hourOfDay, minute));
 
 		}
 	}
@@ -220,7 +234,7 @@ public class PostNewEventActivity extends Activity {
 			// Use the current date as the default date in the picker
 			final Calendar c = Calendar.getInstance();
 			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
+			int month = c.get(Calendar.MONTH+1);
 			int day = c.get(Calendar.DAY_OF_MONTH);
 
 			// Create a new instance of DatePickerDialog and return it
@@ -230,15 +244,7 @@ public class PostNewEventActivity extends Activity {
 		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			// Do something with the date chosen by the user
-			Context context = super.getActivity();
-			DateFormatSymbols date = new DateFormatSymbols();
 
-			CharSequence text = "Current date is " + date.getMonths()[month] + " " + day + ", "
-					+ year;
-			int duration = Toast.LENGTH_SHORT;
-
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
 			if (mButton.getId() == R.id.from_date_button) {
 				fromCal.set(Calendar.YEAR, year);
 				fromCal.set(Calendar.MONTH, month);
@@ -251,7 +257,7 @@ public class PostNewEventActivity extends Activity {
 			} else {
 				Log.d("MIN", "datepicker id is wrong");
 			}
-			mButton.setText(year + "-" + month + "-" + day);
+			mButton.setText(month + "/" + day + "/" + year);
 		}
 	}
 
@@ -261,14 +267,16 @@ public class PostNewEventActivity extends Activity {
 		df.show(getFragmentManager(), "");
 	}
 
-	public static class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
+	public static class InsertEventTask extends
+			AsyncTask<DbEvent, Void, DbEvent> {
 
 		@Override
 		protected DbEvent doInBackground(DbEvent... params) {
 			// Auto-generated method stub
 			DbEvent event = null;
 			try {
-				event = MainActivity.mService.dbevent().insert(params[0]).execute();
+				event = MainActivity.mService.dbevent().insert(params[0])
+						.execute();
 			} catch (IOException e) {
 
 			}
@@ -282,7 +290,7 @@ public class PostNewEventActivity extends Activity {
 				Log.e(MainActivity.HS, "Failed inserting");
 				return;
 			}
-
+			MainActivity.addDbEvent(result);
 		}
 
 	}

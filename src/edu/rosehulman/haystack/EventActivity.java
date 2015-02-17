@@ -3,32 +3,21 @@ package edu.rosehulman.haystack;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.appspot.tombn_songm_haystack.haystack.Haystack;
-import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.ActivityManager.RecentTaskInfo;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
 
 public class EventActivity extends Activity {
 
@@ -55,10 +44,13 @@ public class EventActivity extends Activity {
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
 		Button sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
+		
+		TextView time = (TextView) findViewById(R.id.event_activity_time);
 
 		address.setText(mEvent.getAddress());
 		title.setText(mEvent.getTitle());
 		description.setText(mEvent.getFullDescription());
+		time.setText(mEvent.getStartTime() + " - " + mEvent.getEndTime());
 
 		setUpListView();
 

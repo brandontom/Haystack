@@ -155,29 +155,27 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			// only add events if they are the correct
 
 			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
-				Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
-						event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-						event.getLastTouchDateTime(), event.getComments());
+
 				if (timeSpinnerChoiceNum == 0) {
 
-					mEvents.add(temp);
+					addDbEvent(event);
 				} else if (timeSpinnerChoiceNum == 1) {
 					// TODAY
 					current.add(Calendar.DATE, 1);
 					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						mEvents.add(temp);
+						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 2) {
 					// This week
 					current.add(Calendar.WEEK_OF_YEAR, 1);
 					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						mEvents.add(temp);
+						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 3) {
 					// This month
 					current.add(Calendar.MONTH, 1);
 					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						mEvents.add(temp);
+						addDbEvent(event);
 					}
 				} else {
 					Log.d("MIN", "timespinnerchoicenum out of bounds");
@@ -199,6 +197,13 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				startActivity(eventIntent);
 			}
 		});
+	}
+
+	public static void addDbEvent(DbEvent event) {
+		Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+				event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
+				event.getLastTouchDateTime(), event.getComments());
+		mEvents.add(temp);
 	}
 
 	private void updateEvents() {
@@ -331,13 +336,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			myProgressDialog.dismiss();
 		}
 
-	}
-
-	@Override
-	protected void onResume() {
-		// Auto-generated method stub
-		updateEvents();
-		super.onResume();
 	}
 
 }
