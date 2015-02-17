@@ -67,19 +67,21 @@ public class Event {
 		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-		try {
-			Date fromDate = sdf.parse(mFromDateTime);
-			Date toDate = sdf.parse(mToDateTime);
-			mFromCalendar.setTime(fromDate);
-			mToCalendar.setTime(toDate);
-			mStartHour = mFromCalendar.get(Calendar.HOUR);
-			mStartMinute = mFromCalendar.get(Calendar.MINUTE);
-			mEndHour = mToCalendar.get(Calendar.HOUR);
-			mEndMinute = mToCalendar.get(Calendar.MINUTE);
+		if (mFromDateTime != null && mToDateTime != null) {
+			try {
+				Date fromDate = sdf.parse(mFromDateTime);
+				Date toDate = sdf.parse(mToDateTime);
+				mFromCalendar.setTime(fromDate);
+				mToCalendar.setTime(toDate);
+				mStartHour = mFromCalendar.get(Calendar.HOUR);
+				mStartMinute = mFromCalendar.get(Calendar.MINUTE);
+				mEndHour = mToCalendar.get(Calendar.HOUR);
+				mEndMinute = mToCalendar.get(Calendar.MINUTE);
 
-		} catch (ParseException e) {
-			// Auto-generated catch block
-			Log.d("MIN", "parsing dates error: " + e);
+			} catch (ParseException e) {
+				// Auto-generated catch block
+				Log.d("MIN", "parsing dates error: " + e);
+			}
 		}
 
 		// String[] ar = fromDateTime.split(":");
@@ -165,14 +167,14 @@ public class Event {
 
 	public void setComments(List<String> comments) {
 		mComments = new ArrayList<Comment>();
-		for(String comment : comments){
+		for (String comment : comments) {
 			addComment(comment);
 		}
 	}
 
 	public List<String> getCommentsAsList() {
 		List<String> comments = new ArrayList<String>();
-		for(Comment comment : mComments){
+		for (Comment comment : mComments) {
 			comments.add(0, comment.getComment());
 		}
 		return comments;
