@@ -73,7 +73,7 @@ public class EventActivity extends Activity {
 
 	private void addComment(String text) {
 		mRecentComment = text;
-		(new QueryForComments()).execute(mEvent.getId());
+		(new PostComment()).execute(mEvent.getId());
 	}
 
 	private void setUpListView() {
@@ -85,7 +85,7 @@ public class EventActivity extends Activity {
 		mComments.setAdapter(mAdapter);
 	}
 	
-	class QueryForComments extends AsyncTask<String, Void, DbEventProtoComments> {
+	class PostComment extends AsyncTask<String, Void, DbEventProtoComments> {
 
 		@Override
 		protected DbEventProtoComments doInBackground(String... entityKeys) {

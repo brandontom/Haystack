@@ -76,8 +76,6 @@ public class Event {
 				mStartMinute = mFromCalendar.get(Calendar.MINUTE);
 				mEndHour = mToCalendar.get(Calendar.HOUR_OF_DAY);
 				mEndMinute = mToCalendar.get(Calendar.MINUTE);
-				Log.d("YUP", mTitle + " " + mStartMinute + " " + mEndMinute
-						+ " " + mFromDateTime);
 
 			} catch (ParseException e) {
 				// Auto-generated catch block
