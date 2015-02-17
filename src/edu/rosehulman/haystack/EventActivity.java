@@ -2,6 +2,8 @@ package edu.rosehulman.haystack;
 
 import java.util.ArrayList;
 
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -70,24 +72,16 @@ public class EventActivity extends Activity {
 		mAdapter.notifyDataSetChanged();
 		mComment.setText("");
 		Toast.makeText(this, getResources().getString(R.string.comment_sent), Toast.LENGTH_SHORT).show();
+		DbEvent dbevent = new DbEvent();
 	}
 
 	private void setUpListView() {
 		ArrayList<Comment> comments = mEvent.getComments();
-		populateComments(comments);
 
 		mAdapter = new CommentTileAdapter(this,
 				comments);
 
 		mComments.setAdapter(mAdapter);
-	}
-
-	private void populateComments(ArrayList<Comment> comments) {
-		comments.add(new Comment("This place is great"));
-		comments.add(new Comment("This place is great"));
-		comments.add(new Comment("This place is great"));
-		comments.add(new Comment("This place is great"));
-		comments.add(new Comment("This place is great"));
 	}
 
 }
