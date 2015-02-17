@@ -39,6 +39,7 @@
     <string name="address_edittext_hint">Tap to enter address</string>
     <string name="post_button_text">Post</string>
     <string name="comment_sent">Comment sent</string>
+    <string name="update_events_menu">Update events</string>
 
     <string-array name="sort_spinner_array">
         <item>Featured</item>
@@ -48,7 +49,6 @@
         <item>Today</item>
         <item>This Week</item>
         <item>This Month</item>
-        
     </string-array>
     <string-array name="category_spinner_array">
         <item>Food &amp; Drinks</item>
@@ -57,6 +57,7 @@
         <item>Meetings</item>
         <item>Other</item>
     </string-array>
+
     <string name="all">All</string>
     <string name="brandon">BRANDON</string>
 

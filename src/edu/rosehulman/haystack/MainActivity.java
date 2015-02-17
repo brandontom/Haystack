@@ -256,6 +256,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}else if(id == R.id.update_events){
+			updateEvents();
 		}
 		return super.onOptionsItemSelected(item);
 	}
