@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
+	public static String mCategory;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -72,6 +73,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		mCategory = "All";
 
 		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
 
@@ -106,7 +109,21 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
-		
+
+		mSortSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+
+		});
+
 		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
 
@@ -187,8 +204,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				} else {
 					Log.d("MIN", "timespinnerchoicenum out of bounds");
 				}
-			}else if((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
-							.getTimeInMillis() <= current.getTimeInMillis())){
+			} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
+					.getTimeInMillis() <= current.getTimeInMillis())) {
 				addDbEvent(event);
 			}
 
@@ -216,7 +233,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mEvents.add(temp);
 	}
 
-	private void updateEvents() {
+	void updateEvents() {
 		(new QueryForEventsTask()).execute();
 	}
 
@@ -341,6 +358,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 			if (result == null || result.getItems() == null) {
 				Log.e(HS, "Result is null. Failed loading.");
+				setUpListView(new ArrayList<DbEvent>());
+				myProgressDialog.dismiss();
 				return;
 			}
 			// result.getItems() could be null
