@@ -123,6 +123,11 @@ public class PostNewEventActivity extends Activity {
 							"End time must be set for after the start of the event.",
 							Toast.LENGTH_SHORT).show();
 					return;
+				}else if(fromCal == null || toCal == null){
+					Toast.makeText(
+							PostNewEventActivity.this,
+							"You must have a FromDateTime and ToDateTime.",
+							Toast.LENGTH_SHORT).show();
 				}
 				// Auto-generated method stub
 				DbEvent dbevent = new DbEvent();

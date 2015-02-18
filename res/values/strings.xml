@@ -42,7 +42,8 @@
     <string name="update_events_menu">Update events</string>
 
     <string-array name="sort_spinner_array">
-        <item>Featured</item>
+        <item>Newest</item>
+        <item>Hot</item>
     </string-array>
     <string-array name="time_spinner_array">
         <item>All Time</item>

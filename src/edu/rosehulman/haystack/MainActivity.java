@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
-
+		
 		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
 
