@@ -40,6 +40,7 @@ public class PostNewEventActivity extends Activity {
 	private Spinner mCategorySpinner;
 	private static GregorianCalendar fromCal;
 	private static GregorianCalendar toCal;
+	private static final long COMMENT_SIZE = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +132,7 @@ public class PostNewEventActivity extends Activity {
 
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
-
+				dbevent.setCommentSize(COMMENT_SIZE);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				Log.d("MFDSKFL", "" + fromCal.getTime());
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));

@@ -44,7 +44,7 @@ public class EventActivity extends Activity {
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
 		Button sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
-		
+
 		TextView time = (TextView) findViewById(R.id.event_activity_time);
 
 		address.setText(mEvent.getAddress());
@@ -59,7 +59,7 @@ public class EventActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				String text = mComment.getEditableText().toString();
-				if(text.isEmpty()){
+				if (text.isEmpty()) {
 					return;
 				}
 				addComment(text);
@@ -79,12 +79,11 @@ public class EventActivity extends Activity {
 	private void setUpListView() {
 		ArrayList<Comment> comments = mEvent.getComments();
 
-		mAdapter = new CommentTileAdapter(this,
-				comments);
+		mAdapter = new CommentTileAdapter(this, comments);
 
 		mComments.setAdapter(mAdapter);
 	}
-	
+
 	class PostComment extends AsyncTask<String, Void, DbEventProtoComments> {
 
 		@Override
@@ -109,19 +108,22 @@ public class EventActivity extends Activity {
 			// result.getItems() could be null
 			mEvent.setComments(result.getComments());
 			mEvent.addComment(mRecentComment);
-			
+
 			DbEvent event = new DbEvent();
 			event.setEntityKey(mEvent.getId());
 			event.setComments(mEvent.getCommentsAsList());
-			
+
+			event.setCommentSize((long) mEvent.getComments().size());
+
 			(new PostNewEventActivity.InsertEventTask()).execute(event);
 			mRecentComment = null;
 			mAdapter.addView();
 			mAdapter.notifyDataSetChanged();
 			mComment.setText("");
-			Toast.makeText(EventActivity.this, getResources().getString(R.string.comment_sent), Toast.LENGTH_SHORT).show();
+			Toast.makeText(EventActivity.this, getResources().getString(R.string.comment_sent),
+					Toast.LENGTH_SHORT).show();
 			setUpListView();
-			
+
 		}
 
 	}

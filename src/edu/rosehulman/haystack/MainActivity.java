@@ -37,8 +37,7 @@ import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 
-public class MainActivity extends Activity implements
-		SideSwipeFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements SideSwipeFragment.NavigationDrawerCallbacks {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -69,21 +68,24 @@ public class MainActivity extends Activity implements
 	private int timeSpinnerChoiceNum;
 	// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
 
+	private boolean sortSpinnerHotSelected;
+	// if true, list in order of size of comments
+
 	public static Haystack mService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		sortSpinnerHotSelected = false;
 		mIsRunning = true;
 
 		mCategory = getResources().getString(R.string.all);
 
-		mService = new Haystack(AndroidHttp.newCompatibleTransport(),
-				new GsonFactory(), null);
+		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
 
-		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager()
-				.findFragmentById(R.id.navigation_drawer);
+		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager().findFragmentById(
+				R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -107,21 +109,31 @@ public class MainActivity extends Activity implements
 	}
 
 	private void setUpSpinners() {
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.sort_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
 
 		mSortSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (mSortSpinner.getSelectedItem().equals(
+						getResources().getStringArray(R.array.sort_spinner_array)[1])) {
+					// HOT
+					Log.d(HS, "selected HOT in sortspinner");
+					sortSpinnerHotSelected = true;
+					updateEvents();
 
+				} else if (mSortSpinner.getSelectedItem().equals(
+						getResources().getStringArray(R.array.sort_spinner_array)[0])) {
+					sortSpinnerHotSelected = false;
+					updateEvents();
+				} else {
+					Log.d(HS, "sortspinner selected position out of bounds");
+				}
 			}
 
 			@Override
@@ -131,19 +143,16 @@ public class MainActivity extends Activity implements
 
 		});
 
-		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.time_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
 
-		timeSpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mTimeSpinner.setAdapter(timeSpinnerAdapter);
 		mTimeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				// update
 				timeSpinnerChoiceNum = position;
 
@@ -166,8 +175,7 @@ public class MainActivity extends Activity implements
 		for (DbEvent event : list) {
 			GregorianCalendar current = new GregorianCalendar();
 
-			SimpleDateFormat sdf = new SimpleDateFormat(
-					"yyyy-MM-dd'T'hh:mm:ss.SSS");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 			String mFromDateTime = event.getFromDateTime();
 			String mToDateTime = event.getToDateTime();
 			GregorianCalendar mFromCalendar = new GregorianCalendar();
@@ -186,8 +194,7 @@ public class MainActivity extends Activity implements
 			// only add events if they are the correct
 
 			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
-					|| mToCalendar.getTimeInMillis() >= current
-							.getTimeInMillis()) {
+					|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
 
 				if (timeSpinnerChoiceNum == 0) {
 
@@ -195,36 +202,29 @@ public class MainActivity extends Activity implements
 				} else if (timeSpinnerChoiceNum == 1) {
 					// TODAY
 					current.add(Calendar.DATE, 1);
-					if (mFromCalendar.getTimeInMillis() < current
-							.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current
-									.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 2) {
 					// This week
 					current.add(Calendar.WEEK_OF_YEAR, 1);
-					if (mFromCalendar.getTimeInMillis() < current
-							.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current
-									.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 3) {
 					// This month
 					current.add(Calendar.MONTH, 1);
-					if (mFromCalendar.getTimeInMillis() < current
-							.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current
-									.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else {
 					Log.d("MIN", "timespinnerchoicenum out of bounds");
 				}
-			} else if ((mFromCalendar.getTimeInMillis() <= current
-					.getTimeInMillis() && mToCalendar.getTimeInMillis() <= current
-					.getTimeInMillis())) {
+			} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
+					.getTimeInMillis() <= current.getTimeInMillis())) {
 				addDbEvent(event);
 			}
 
@@ -237,10 +237,8 @@ public class MainActivity extends Activity implements
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent eventIntent = new Intent(MainActivity.this,
-						EventActivity.class);
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent eventIntent = new Intent(MainActivity.this, EventActivity.class);
 				eventIntent.putExtra(KEY_EVENT_ID, position);
 				startActivity(eventIntent);
 			}
@@ -251,9 +249,8 @@ public class MainActivity extends Activity implements
 
 		if (mCategory.equals(event.getCategory())
 				|| mCategory.equals(getResources().getString(R.string.all))) {
-			Event temp = new Event(event.getTitle(), event.getAddress(),
-					event.getToDateTime(), event.getFromDateTime(),
-					event.getEntityKey(), event.getDescription(),
+			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
 					event.getLastTouchDateTime(), event.getComments());
 			mEvents.add(temp);
 		}
@@ -270,16 +267,13 @@ public class MainActivity extends Activity implements
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
 
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+		fragmentManager.beginTransaction()
+				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
 		updateEvents();
 	}
 
 	public void onSectionAttached(int number) {
-		String[] categories = getResources().getStringArray(
-				R.array.category_spinner_array);
+		String[] categories = getResources().getStringArray(R.array.category_spinner_array);
 		if (number == 1) {
 			mTitle = getString(R.string.all);
 		} else {
@@ -348,16 +342,14 @@ public class MainActivity extends Activity implements
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
+			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 			return rootView;
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(getArguments().getInt(
-					ARG_SECTION_NUMBER));
+			((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
 		}
 	}
 
@@ -379,6 +371,10 @@ public class MainActivity extends Activity implements
 			try {
 				List query = mService.dbevent().list();
 				query.setOrder("-last_touch_date_time");
+
+				if (sortSpinnerHotSelected) {
+					query.setOrder("-comment_size");
+				}
 				query.setLimit(50L);
 				quotes = query.execute();
 			} catch (IOException e) {
