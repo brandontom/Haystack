@@ -129,7 +129,6 @@ public class PostNewEventActivity extends Activity {
 				DbEvent dbevent = new DbEvent();
 				dbevent.setAddress(address.getText().toString());
 				dbevent.setCategory(mCategorySpinner.getSelectedItem().toString());
-
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
 				dbevent.setCommentSize(COMMENT_SIZE);

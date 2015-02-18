@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Light_Blue" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/radioGroup1"
+        android:layout_toLeftOf="@+id/radioGroup1"
+        android:textSize="20sp"
+        android:text="@string/event_search_" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="53dp" >
+
+        <RadioButton
+            android:id="@+id/radio5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/_5_mile_radius" />
+
+        <RadioButton
+            android:id="@+id/radio10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_10_mile_radius" />
+
+        <RadioButton
+            android:id="@+id/radio20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/_20_mile_radius" />
+
+        <RadioButton
+            android:id="@+id/radio50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_50_mile_radius" />
+    </RadioGroup>
+
+</RelativeLayout>

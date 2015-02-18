@@ -53,7 +53,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
 
-	private ListView mListView;
+	public static int mSearchRadius;
+	ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
 	public static String mCategory;
@@ -79,6 +80,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		setContentView(R.layout.activity_main);
 		sortSpinnerHotSelected = false;
 		mIsRunning = true;
+		mSearchRadius = 20;
 
 		mCategory = getResources().getString(R.string.all);
 

@@ -33,6 +33,10 @@
             android:name=".PostNewEventActivity"
             android:label="@string/title_activity_post_new_event" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_activity" >
+        </activity>
     </application>
 
 </manifest>

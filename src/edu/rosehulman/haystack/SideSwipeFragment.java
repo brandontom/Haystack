@@ -94,6 +94,7 @@ public class SideSwipeFragment extends Fragment {
 		categories.addAll(Arrays.asList(getResources().getStringArray(
 				R.array.category_spinner_array)));
 		categories.add(getResources().getString(R.string.post_new_event));
+		categories.add(getResources().getString(R.string.settings));
 		return categories.toArray(new String[categories.size()]);
 	}
 
@@ -121,7 +122,11 @@ public class SideSwipeFragment extends Fragment {
 							Intent postNewEvent = new Intent(getActivity(),
 									PostNewEventActivity.class);
 							startActivity(postNewEvent);
-						} else {
+						} else if(mCategories[position].equals(getResources().getString(R.string.settings))){
+							Intent settings = new Intent(getActivity(),
+									SettingsActivity.class);
+							startActivity(settings);
+						}else {
 							selectItem(position);
 						}
 					}
