@@ -16,6 +16,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.appspot.tombn_songm_haystack.haystack.Haystack;
 import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
@@ -59,6 +61,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private Spinner mTimeSpinner;
 	public static String mCategory;
 	public static boolean mIsRunning;
+	private static String id;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -81,6 +84,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		sortSpinnerHotSelected = false;
 		mIsRunning = true;
 		mSearchRadius = 20;
+		id = Secure.getString(this.getContentResolver(),
+	            Secure.ANDROID_ID);
 
 		mCategory = getResources().getString(R.string.all);
 
