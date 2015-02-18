@@ -84,7 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/event_activity_edit_comment"
         android:layout_below="@+id/event_activity_comments"
-        android:scrollbars="vertical" >
+        android:scrollbars="vertical"
+        android:layout_margin="5dp" >
     </ListView>
 
     <EditText

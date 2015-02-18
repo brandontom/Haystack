@@ -183,7 +183,6 @@ public class SideSwipeFragment extends Fragment {
 				if (!isAdded()) {
 					return;
 				}
-
 				getActivity().invalidateOptionsMenu(); // calls
 														// onPrepareOptionsMenu()
 			}
@@ -231,6 +230,7 @@ public class SideSwipeFragment extends Fragment {
 
 	private void selectItem(int position) {
 		mCurrentSelectedPosition = position;
+		MainActivity.mCategory = mCategories[position];
 		if (mDrawerListView != null) {
 			mDrawerListView.setItemChecked(position, true);
 		}

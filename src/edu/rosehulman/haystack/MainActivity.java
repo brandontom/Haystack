@@ -37,7 +37,8 @@ import com.appspot.tombn_songm_haystack.haystack.model.DbEventCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 
-public class MainActivity extends Activity implements SideSwipeFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements
+		SideSwipeFragment.NavigationDrawerCallbacks {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -56,6 +57,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private ListView mListView;
 	private Spinner mSortSpinner;
 	private Spinner mTimeSpinner;
+	public static String mCategory;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -73,10 +75,14 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+		mCategory = getResources().getStringArray(
+				R.array.category_spinner_array)[0];
 
-		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager().findFragmentById(
-				R.id.navigation_drawer);
+		mService = new Haystack(AndroidHttp.newCompatibleTransport(),
+				new GsonFactory(), null);
+
+		mNavigationDrawerFragment = (SideSwipeFragment) getFragmentManager()
+				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -100,23 +106,42 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	private void setUpSpinners() {
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
+				.createFromResource(this, R.array.sort_spinner_array,
+						android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mSortSpinner.setAdapter(arraySpinnerAdapter);
+		mSortSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.time_spinner_array, android.R.layout.simple_spinner_item);
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+			}
 
-		timeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				
+			}
+
+		});
+
+		ArrayAdapter<CharSequence> timeSpinnerAdapter = ArrayAdapter
+				.createFromResource(this, R.array.time_spinner_array,
+						android.R.layout.simple_spinner_item);
+
+		timeSpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mTimeSpinner.setAdapter(timeSpinnerAdapter);
 		mTimeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
 				// update
 				timeSpinnerChoiceNum = position;
 
@@ -139,7 +164,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		for (DbEvent event : list) {
 			GregorianCalendar current = new GregorianCalendar();
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					"yyyy-MM-dd'T'hh:mm:ss.SSS");
 			String mFromDateTime = event.getFromDateTime();
 			String mToDateTime = event.getToDateTime();
 			GregorianCalendar mFromCalendar = new GregorianCalendar();
@@ -158,7 +184,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			// only add events if they are the correct
 
 			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
-					|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
+					|| mToCalendar.getTimeInMillis() >= current
+							.getTimeInMillis()) {
 
 				if (timeSpinnerChoiceNum == 0) {
 
@@ -166,29 +193,36 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				} else if (timeSpinnerChoiceNum == 1) {
 					// TODAY
 					current.add(Calendar.DATE, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current
+							.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current
+									.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 2) {
 					// This week
 					current.add(Calendar.WEEK_OF_YEAR, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current
+							.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current
+									.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else if (timeSpinnerChoiceNum == 3) {
 					// This month
 					current.add(Calendar.MONTH, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					if (mFromCalendar.getTimeInMillis() < current
+							.getTimeInMillis()
+							|| mToCalendar.getTimeInMillis() < current
+									.getTimeInMillis()) {
 						addDbEvent(event);
 					}
 				} else {
 					Log.d("MIN", "timespinnerchoicenum out of bounds");
 				}
-			}else if((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
-							.getTimeInMillis() <= current.getTimeInMillis())){
+			} else if ((mFromCalendar.getTimeInMillis() <= current
+					.getTimeInMillis() && mToCalendar.getTimeInMillis() <= current
+					.getTimeInMillis())) {
 				addDbEvent(event);
 			}
 
@@ -201,8 +235,10 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent eventIntent = new Intent(MainActivity.this, EventActivity.class);
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent eventIntent = new Intent(MainActivity.this,
+						EventActivity.class);
 				eventIntent.putExtra(KEY_EVENT_ID, position);
 				startActivity(eventIntent);
 			}
@@ -210,13 +246,14 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	public static void addDbEvent(DbEvent event) {
-		Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
-				event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
+		Event temp = new Event(event.getTitle(), event.getAddress(),
+				event.getToDateTime(), event.getFromDateTime(),
+				event.getEntityKey(), event.getDescription(),
 				event.getLastTouchDateTime(), event.getComments());
 		mEvents.add(temp);
 	}
 
-	private void updateEvents() {
+	void updateEvents() {
 		(new QueryForEventsTask()).execute();
 	}
 
@@ -224,12 +261,15 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.container,
+						PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	public void onSectionAttached(int number) {
-		String[] categories = getResources().getStringArray(R.array.category_spinner_array);
+		String[] categories = getResources().getStringArray(
+				R.array.category_spinner_array);
 		if (number == 1) {
 			mTitle = getString(R.string.all);
 		} else {
@@ -298,14 +338,16 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
 			return rootView;
 		}
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+			((MainActivity) activity).onSectionAttached(getArguments().getInt(
+					ARG_SECTION_NUMBER));
 		}
 	}
 
@@ -326,6 +368,11 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			DbEventCollection quotes = null;
 			try {
 				List query = mService.dbevent().list();
+				if (!mCategory.equals(getResources().getStringArray(
+						R.array.category_spinner_array)[0])) {
+					Log.d("FJDKSLJFDS", "" + mCategory);
+					query.setCategory(mCategory);
+				}
 				query.setOrder("-last_touch_date_time");
 				query.setLimit(50L);
 				quotes = query.execute();
@@ -341,6 +388,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 			if (result == null || result.getItems() == null) {
 				Log.e(HS, "Result is null. Failed loading.");
+				setUpListView(new ArrayList<DbEvent>());
+				myProgressDialog.dismiss();
 				return;
 			}
 			// result.getItems() could be null
