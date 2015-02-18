@@ -49,6 +49,6 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/like_event"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:src="@android:drawable/btn_star_big_on" />
+        android:src="@android:drawable/btn_star_big_off" />
 
 </LinearLayout>

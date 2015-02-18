@@ -51,13 +51,25 @@ public class RowViewAdapter extends BaseAdapter {
 		final Event event = (Event) getItem(position);
 		
 		ImageView rating = (ImageView) view.findViewById(R.id.rowview_rating);
+		if(event.getLikes().contains(MainActivity.id)){
+			rating.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+		}
 		rating.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				//do whatever to like the event.
-				Toast.makeText(mContext, "You like this event!",
-						Toast.LENGTH_SHORT).show();
+				if(!event.getLikes().contains(MainActivity.id)){
+					Toast.makeText(mContext, "You like this event!",
+							Toast.LENGTH_SHORT).show();
+					event.like(MainActivity.id);
+					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+				}else{
+					Toast.makeText(mContext, "You disliked this event!",
+							Toast.LENGTH_SHORT).show();
+					event.unLike(MainActivity.id);
+					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+				}
 			}
 		});
 		// Fill the view with data

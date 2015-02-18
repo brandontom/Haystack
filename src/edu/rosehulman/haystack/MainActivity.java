@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.appspot.tombn_songm_haystack.haystack.Haystack;
 import com.appspot.tombn_songm_haystack.haystack.Haystack.Dbevent.List;
@@ -61,7 +60,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private Spinner mTimeSpinner;
 	public static String mCategory;
 	public static boolean mIsRunning;
-	private static String id;
+	public static String id;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -259,12 +258,11 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	public void addDbEvent(DbEvent event) {
-
 		if (mCategory.equals(event.getCategory())
 				|| mCategory.equals(getResources().getString(R.string.all))) {
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
 					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments());
+					event.getLastTouchDateTime(), event.getComments(), event.getLikes());
 			mEvents.add(temp);
 		}
 	}

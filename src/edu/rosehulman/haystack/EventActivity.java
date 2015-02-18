@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,29 @@ public class EventActivity extends Activity {
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
 		sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
+		
+		ImageView rating = (ImageView) findViewById(R.id.event_activity_rating);
+		if(mEvent.getLikes().contains(MainActivity.id)){
+			rating.setImageDrawable(this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+		}
+		rating.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//do whatever to like the event.
+				if(!mEvent.getLikes().contains(MainActivity.id)){
+					Toast.makeText(EventActivity.this, "You like this event!",
+							Toast.LENGTH_SHORT).show();
+					mEvent.like(MainActivity.id);
+					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+				}else{
+					Toast.makeText(EventActivity.this, "You disliked this event!",
+							Toast.LENGTH_SHORT).show();
+					mEvent.unLike(MainActivity.id);
+					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+				}
+			}
+		});
 
 		TextView time = (TextView) findViewById(R.id.event_activity_time);
 

@@ -25,7 +25,7 @@ public class Event {
 	private String mAddress;
 	private String mDescription;
 	private String mEventID;
-	private int mUpvotes;
+	private ArrayList<String> mLikes;
 	private String mCategory;
 	private ArrayList<Comment> mComments;
 	private String mLastModified;
@@ -38,7 +38,7 @@ public class Event {
 		mEndMinute = 0;
 		mDescription = "Free Drinks on Tuesdays!";
 		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
-		mUpvotes = 0;
+		mLikes = new ArrayList<String>();
 		mComments = new ArrayList<Comment>();
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
@@ -46,7 +46,7 @@ public class Event {
 
 	public Event(String title, String address, String toDateTime,
 			String fromDateTime, String entityKey, String description,
-			String lastTouchDateTime, List<String> comments) {
+			String lastTouchDateTime, List<String> comments, List<String> likes) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
@@ -54,7 +54,12 @@ public class Event {
 		mEventID = entityKey;
 		mDescription = description;
 		mLastModified = lastTouchDateTime;
-		mUpvotes = 0;
+		mLikes = new ArrayList<String>();
+		if (likes != null) {
+			for (String like : likes) {
+				mLikes.add(like);
+			}
+		}
 
 		mFromDateTime = fromDateTime;
 		mToDateTime = toDateTime;
@@ -151,8 +156,8 @@ public class Event {
 		mComments.add(0, new Comment(comment));
 	}
 
-	public int getUpvotes() {
-		return mUpvotes;
+	public ArrayList<String> getLikes() {
+		return mLikes;
 	}
 
 	public String getCategory() {
@@ -178,6 +183,14 @@ public class Event {
 			comments.add(0, comment.getComment());
 		}
 		return comments;
+	}
+
+	public void like(String id) {
+		mLikes.add(id);
+	}
+
+	public void unLike(String id) {
+		mLikes.remove(id);
 	}
 
 }

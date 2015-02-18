@@ -19,7 +19,7 @@
 package com.appspot.tombn_songm_haystack.haystack.model;
 
 /**
- * Model definition for DbEventCollection.
+ * Model definition for DbEventProtoLikes.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the haystack. For a detailed explanation see:
@@ -29,58 +29,37 @@ package com.appspot.tombn_songm_haystack.haystack.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class DbEventCollection extends com.google.api.client.json.GenericJson {
+public final class DbEventProtoLikes extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.util.List<DbEvent> items;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String nextPageToken;
+  private java.util.List<java.lang.String> likes;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.util.List<DbEvent> getItems() {
-    return items;
+  public java.util.List<java.lang.String> getLikes() {
+    return likes;
   }
 
   /**
-   * @param items items or {@code null} for none
+   * @param likes likes or {@code null} for none
    */
-  public DbEventCollection setItems(java.util.List<DbEvent> items) {
-    this.items = items;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getNextPageToken() {
-    return nextPageToken;
-  }
-
-  /**
-   * @param nextPageToken nextPageToken or {@code null} for none
-   */
-  public DbEventCollection setNextPageToken(java.lang.String nextPageToken) {
-    this.nextPageToken = nextPageToken;
+  public DbEventProtoLikes setLikes(java.util.List<java.lang.String> likes) {
+    this.likes = likes;
     return this;
   }
 
   @Override
-  public DbEventCollection set(String fieldName, Object value) {
-    return (DbEventCollection) super.set(fieldName, value);
+  public DbEventProtoLikes set(String fieldName, Object value) {
+    return (DbEventProtoLikes) super.set(fieldName, value);
   }
 
   @Override
-  public DbEventCollection clone() {
-    return (DbEventCollection) super.clone();
+  public DbEventProtoLikes clone() {
+    return (DbEventProtoLikes) super.clone();
   }
 
 }

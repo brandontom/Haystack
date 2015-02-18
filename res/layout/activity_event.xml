@@ -25,7 +25,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/like_event"
         android:paddingLeft="10dp"
-        android:src="@android:drawable/btn_star_big_on" />
+        android:src="@android:drawable/btn_star_big_off" />
 
     <TextView
         android:id="@+id/event_activity_description"
