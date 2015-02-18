@@ -75,8 +75,7 @@ public class MainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mCategory = getResources().getStringArray(
-				R.array.category_spinner_array)[0];
+		mCategory = "All";
 
 		mService = new Haystack(AndroidHttp.newCompatibleTransport(),
 				new GsonFactory(), null);
@@ -368,11 +367,6 @@ public class MainActivity extends Activity implements
 			DbEventCollection quotes = null;
 			try {
 				List query = mService.dbevent().list();
-				if (!mCategory.equals(getResources().getStringArray(
-						R.array.category_spinner_array)[0])) {
-					Log.d("FJDKSLJFDS", "" + mCategory);
-					query.setCategory(mCategory);
-				}
 				query.setOrder("-last_touch_date_time");
 				query.setLimit(50L);
 				quotes = query.execute();
