@@ -53,9 +53,8 @@ public class PostNewEventActivity extends Activity {
 		title = (EditText) findViewById(R.id.edit_title);
 
 		fromTimePicker = (Button) findViewById(R.id.from_time_button);
-		fromTimePicker
-				.setText(Event.convertTime(fromCal.get(Calendar.HOUR_OF_DAY),
-						fromCal.get(Calendar.MINUTE)));
+		fromTimePicker.setText(Event.convertTime(fromCal.get(Calendar.HOUR_OF_DAY),
+				fromCal.get(Calendar.MINUTE)));
 		fromTimePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -72,10 +71,8 @@ public class PostNewEventActivity extends Activity {
 		// fromTimePicker.setText(sdf.format(cal.getTime()));
 
 		fromDatePicker = (Button) findViewById(R.id.from_date_button);
-		fromDatePicker
-				.setText(1 + fromCal.get(Calendar.MONTH) + "/"
-						+ fromCal.get(Calendar.DATE) + "/"
-						+ fromCal.get(Calendar.YEAR));
+		fromDatePicker.setText(1 + fromCal.get(Calendar.MONTH) + "/" + fromCal.get(Calendar.DATE)
+				+ "/" + fromCal.get(Calendar.YEAR));
 		fromDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -98,8 +95,8 @@ public class PostNewEventActivity extends Activity {
 		});
 
 		toDatePicker = (Button) findViewById(R.id.to_date_button);
-		toDatePicker.setText(1 + toCal.get(Calendar.MONTH) + "/"
-				+ toCal.get(Calendar.DATE) + "/" + toCal.get(Calendar.YEAR));
+		toDatePicker.setText(1 + toCal.get(Calendar.MONTH) + "/" + toCal.get(Calendar.DATE) + "/"
+				+ toCal.get(Calendar.YEAR));
 		toDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -118,28 +115,24 @@ public class PostNewEventActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if (fromCal.getTimeInMillis() >= toCal.getTimeInMillis()) {
-					Toast.makeText(
-							PostNewEventActivity.this,
+					Toast.makeText(PostNewEventActivity.this,
 							"End time must be set for after the start of the event.",
 							Toast.LENGTH_SHORT).show();
 					return;
-				}else if(fromCal == null || toCal == null){
-					Toast.makeText(
-							PostNewEventActivity.this,
-							"You must have a FromDateTime and ToDateTime.",
-							Toast.LENGTH_SHORT).show();
+				} else if (fromCal == null || toCal == null) {
+					Toast.makeText(PostNewEventActivity.this,
+							"You must have a FromDateTime and ToDateTime.", Toast.LENGTH_SHORT)
+							.show();
 				}
 				// Auto-generated method stub
 				DbEvent dbevent = new DbEvent();
 				dbevent.setAddress(address.getText().toString());
-				dbevent.setCategory(mCategorySpinner.getSelectedItem()
-						.toString());
+				dbevent.setCategory(mCategorySpinner.getSelectedItem().toString());
 
 				dbevent.setDescription(description.getText().toString());
 				dbevent.setTitle(title.getText().toString());
 
-				SimpleDateFormat sdf = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.SSS");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				Log.d("MFDSKFL", "" + fromCal.getTime());
 				dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 				dbevent.setToDateTime(sdf.format(toCal.getTime()));
@@ -161,12 +154,10 @@ public class PostNewEventActivity extends Activity {
 
 		mCategorySpinner = (Spinner) findViewById(R.id.post_category_spinner);
 
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.category_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.category_spinner_array, android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mCategorySpinner.setAdapter(arraySpinnerAdapter);
 
@@ -196,8 +187,7 @@ public class PostNewEventActivity extends Activity {
 		}
 
 		@Override
-		public void onTimeSet(TimePicker view, final int hourOfDay,
-				final int minute) {
+		public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
 			// Do something with the time chosen by the user
 			mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			mCal.set(Calendar.MINUTE, minute);
@@ -243,7 +233,7 @@ public class PostNewEventActivity extends Activity {
 			mCal.set(Calendar.YEAR, year);
 			mCal.set(Calendar.MONTH, month);
 			mCal.set(Calendar.DATE, day);
-			mButton.setText((month+1) + "/" + day + "/" + year);
+			mButton.setText((month + 1) + "/" + day + "/" + year);
 		}
 	}
 
@@ -253,16 +243,14 @@ public class PostNewEventActivity extends Activity {
 		df.show(getFragmentManager(), "");
 	}
 
-	public static class InsertEventTask extends
-			AsyncTask<DbEvent, Void, DbEvent> {
+	public static class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
 
 		@Override
 		protected DbEvent doInBackground(DbEvent... params) {
 			// Auto-generated method stub
 			DbEvent event = null;
 			try {
-				event = MainActivity.mService.dbevent().insert(params[0])
-						.execute();
+				event = MainActivity.mService.dbevent().insert(params[0]).execute();
 			} catch (IOException e) {
 
 			}
@@ -276,7 +264,6 @@ public class PostNewEventActivity extends Activity {
 				Log.e(MainActivity.HS, "Failed inserting");
 				return;
 			}
-			MainActivity.addDbEvent(result);
 		}
 
 	}

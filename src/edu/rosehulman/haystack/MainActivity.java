@@ -226,11 +226,14 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		});
 	}
 
-	public static void addDbEvent(DbEvent event) {
-		Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
-				event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-				event.getLastTouchDateTime(), event.getComments());
-		mEvents.add(temp);
+	public void addDbEvent(DbEvent event) {
+		
+		if (mCategory.equals(event.getCategory())||mCategory.equals(getResources().getString(R.string.all))) {
+			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
+					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
+					event.getLastTouchDateTime(), event.getComments());
+			mEvents.add(temp);
+		}
 	}
 
 	void updateEvents() {
