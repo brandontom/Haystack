@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		// if mTimeSpinner is for all time,
 		timeSpinnerChoiceNum = mTimeSpinner.getSelectedItemPosition();
-		// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
+		// NOTE: , 0 = Today, 1 = This Week, 2 = This Month 3 = all time
 
 		updateEvents();
 	}
@@ -175,63 +175,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			GregorianCalendar current = new GregorianCalendar();
-
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
-			String mFromDateTime = event.getFromDateTime();
-			String mToDateTime = event.getToDateTime();
-			GregorianCalendar mFromCalendar = new GregorianCalendar();
-			GregorianCalendar mToCalendar = new GregorianCalendar();
-
-			try {
-				Date fromDate = sdf.parse(mFromDateTime);
-				Date toDate = sdf.parse(mToDateTime);
-				mFromCalendar.setTime(fromDate);
-				mToCalendar.setTime(toDate);
-
-			} catch (ParseException e) {
-				// Auto-generated catch block
-				Log.d("MIN", "parsing dates error in MainActivity: " + e);
-			}
-			// only add events if they are the correct
-
-			if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
-					|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
-
-				if (timeSpinnerChoiceNum == 0) {
-
-					addDbEvent(event);
-				} else if (timeSpinnerChoiceNum == 1) {
-					// TODAY
-					current.add(Calendar.DATE, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						addDbEvent(event);
-					}
-				} else if (timeSpinnerChoiceNum == 2) {
-					// This week
-					current.add(Calendar.WEEK_OF_YEAR, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						addDbEvent(event);
-					}
-				} else if (timeSpinnerChoiceNum == 3) {
-					// This month
-					current.add(Calendar.MONTH, 1);
-					if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
-							|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-						addDbEvent(event);
-					}
-				} else {
-					Log.d("MIN", "timespinnerchoicenum out of bounds");
-				}
-			} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
-					.getTimeInMillis() <= current.getTimeInMillis())) {
-				addDbEvent(event);
-			}
-
+			filterEventByTime(event);
+			filterEventByLocation(event);
 		}
-
 		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
 
 		mListView.setAdapter(adapter);
@@ -245,6 +191,66 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				startActivity(eventIntent);
 			}
 		});
+	}
+
+	private void filterEventByLocation(DbEvent event) {
+		//TODO
+	}
+
+	private void filterEventByTime(DbEvent event) {
+		GregorianCalendar current = new GregorianCalendar();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+		String mFromDateTime = event.getFromDateTime();
+		String mToDateTime = event.getToDateTime();
+		GregorianCalendar mFromCalendar = new GregorianCalendar();
+		GregorianCalendar mToCalendar = new GregorianCalendar();
+
+		try {
+			Date fromDate = sdf.parse(mFromDateTime);
+			Date toDate = sdf.parse(mToDateTime);
+			mFromCalendar.setTime(fromDate);
+			mToCalendar.setTime(toDate);
+
+		} catch (ParseException e) {
+			// Auto-generated catch block
+			Log.d("MIN", "parsing dates error in MainActivity: " + e);
+		}
+		// only add events if they are the correct
+		if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
+				|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
+
+			if (timeSpinnerChoiceNum == 3) {
+
+				addDbEvent(event);
+			} else if (timeSpinnerChoiceNum == 0) {
+				// TODAY
+				current.add(Calendar.DATE, 1);
+				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					addDbEvent(event);
+				}
+			} else if (timeSpinnerChoiceNum == 1) {
+				// This week
+				current.add(Calendar.WEEK_OF_YEAR, 1);
+				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					addDbEvent(event);
+				}
+			} else if (timeSpinnerChoiceNum == 2) {
+				// This month
+				current.add(Calendar.MONTH, 1);
+				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
+						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
+					addDbEvent(event);
+				}
+			} else {
+				Log.d("MIN", "timespinnerchoicenum out of bounds");
+			}
+		} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
+				.getTimeInMillis() <= current.getTimeInMillis())) {
+			addDbEvent(event);
+		}
 	}
 
 	public void addDbEvent(DbEvent event) {

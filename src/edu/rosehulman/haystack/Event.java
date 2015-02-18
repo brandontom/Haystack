@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class Event {
 
-	private static final int MAX_DESC_LENGTH = 40;
+	private static final int MAX_DESC_LENGTH = 32;
 	private String mTitle;
 	private int mStartHour;
 	private int mStartMinute;

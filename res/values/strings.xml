@@ -46,10 +46,10 @@
         <item>Hot</item>
     </string-array>
     <string-array name="time_spinner_array">
-        <item>All Time</item>
         <item>Today</item>
         <item>This Week</item>
         <item>This Month</item>
+        <item>All Time</item>
     </string-array>
     <string-array name="category_spinner_array">
         <item>Food &amp; Drinks</item>
