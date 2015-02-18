@@ -264,6 +264,7 @@ public class PostNewEventActivity extends Activity {
 				Log.e(MainActivity.HS, "Failed inserting");
 				return;
 			}
+			
 		}
 
 	}

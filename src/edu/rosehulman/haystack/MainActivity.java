@@ -227,8 +227,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	public void addDbEvent(DbEvent event) {
-		
-		if (mCategory.equals(event.getCategory())||mCategory.equals(getResources().getString(R.string.all))) {
+
+		if (mCategory.equals(event.getCategory())
+				|| mCategory.equals(getResources().getString(R.string.all))) {
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
 					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
 					event.getLastTouchDateTime(), event.getComments());
@@ -246,7 +247,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
-		updateEvents();
+		
 	}
 
 	public void onSectionAttached(int number) {
