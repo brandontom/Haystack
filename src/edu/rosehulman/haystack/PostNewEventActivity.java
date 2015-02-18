@@ -204,7 +204,6 @@ public class PostNewEventActivity extends Activity {
 		dbevent.setLon(mLon);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-		Log.d("MFDSKFL", "" + fromCal.getTime());
 		dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 		dbevent.setToDateTime(sdf.format(toCal.getTime()));
 

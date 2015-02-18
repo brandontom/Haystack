@@ -25,6 +25,7 @@ public class EventActivity extends Activity {
 	ListView mComments;
 	CommentTileAdapter mAdapter;
 	EditText mComment;
+	Button sendButton;
 	String mRecentComment;
 
 	@Override
@@ -42,7 +43,7 @@ public class EventActivity extends Activity {
 		TextView title = (TextView) findViewById(R.id.event_activity_title);
 		TextView description = (TextView) findViewById(R.id.event_activity_description);
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
-		Button sendButton = (Button) findViewById(R.id.event_activity_send_comment);
+		sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
 
 		TextView time = (TextView) findViewById(R.id.event_activity_time);
@@ -62,6 +63,8 @@ public class EventActivity extends Activity {
 				if (text.isEmpty()) {
 					return;
 				}
+				mComment.clearFocus();
+				sendButton.requestFocus();
 				addComment(text);
 			}
 		});
