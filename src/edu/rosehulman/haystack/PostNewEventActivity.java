@@ -256,7 +256,7 @@ public class PostNewEventActivity extends Activity {
 			}
 			return event;
 		}
-
+		
 		@Override
 		protected void onPostExecute(DbEvent result) {
 			super.onPostExecute(result);
