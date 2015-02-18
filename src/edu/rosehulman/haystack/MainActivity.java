@@ -259,7 +259,9 @@ public class MainActivity extends Activity implements
 	}
 
 	void updateEvents() {
-		(new QueryForEventsTask()).execute();
+		if (mIsRunning) {
+			(new QueryForEventsTask()).execute();
+		}
 	}
 
 	@Override
@@ -270,9 +272,7 @@ public class MainActivity extends Activity implements
 				.beginTransaction()
 				.replace(R.id.container,
 						PlaceholderFragment.newInstance(position + 1)).commit();
-		if(mIsRunning){
-			updateEvents();
-		}
+		updateEvents();
 	}
 
 	public void onSectionAttached(int number) {
