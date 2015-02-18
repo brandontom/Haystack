@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mCategory = "All";
+		mCategory = getResources().getString(R.string.all);
 
 		mService = new Haystack(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
 
@@ -246,6 +246,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
+		updateEvents();
 	}
 
 	public void onSectionAttached(int number) {
