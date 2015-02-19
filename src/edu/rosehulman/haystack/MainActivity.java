@@ -187,7 +187,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			if (filterEventByTime(event)) {
+			if (filterEventByTime(event) && filterEventByLocation(event)) {
 				addDbEvent(event);
 
 			}
@@ -208,13 +208,15 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	private boolean filterEventByLocation(DbEvent event) {
-		// TODO
 
-		// double eLat= event.getLat();
-		// double eLng= event.getLon();
-		// double mLat= 0; //TODO:
-		// double mLng = 0; //TODO:
-		// haversine(eLat, eLng, mLat, mLng);
+		double eLat = event.getLat();
+		double eLon = event.getLon();
+
+		if (haversine(eLat, eLon, mLat, mLon) < mSearchRadius) {
+			return true;
+		} else {
+			return false;
+		}
 
 		// LocationManager mlocManager = (LocationManager)
 		// getSystemService(Context.LOCATION_SERVICE);
@@ -223,7 +225,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		// mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 		// 0, mlocListener);
 		//
-		return true;
 
 	}
 
