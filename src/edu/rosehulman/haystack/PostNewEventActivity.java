@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -270,7 +269,6 @@ public class PostNewEventActivity extends Activity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the default date in the picker
-			final Calendar c = Calendar.getInstance();
 			int year = mCal.get(Calendar.YEAR);
 			int month = mCal.get(Calendar.MONTH);
 			int day = mCal.get(Calendar.DAY_OF_MONTH);

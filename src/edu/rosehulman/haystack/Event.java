@@ -34,7 +34,7 @@ public class Event {
 	private ArrayList<String> mLikes;
 	private String mCategory;
 	private ArrayList<Comment> mComments;
-	private String mLastModified;
+
 	private DateFormatSymbols dfs = new DateFormatSymbols();
 	private String[] months = dfs.getMonths();
 
@@ -61,7 +61,6 @@ public class Event {
 		mAddress = address;
 		mEventID = entityKey;
 		mDescription = description;
-		mLastModified = lastTouchDateTime;
 		mLikes = new ArrayList<String>();
 		if (likes != null) {
 			for (String like : likes) {
