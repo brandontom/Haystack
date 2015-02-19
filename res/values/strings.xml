@@ -69,5 +69,6 @@
     <string name="search_radius">Search Radius</string>
     <string name="event_search_">Event Search:</string>
     <string name="settings_activity">Settings Activity</string>
+    <string name="likes_start">0 likes</string>
 
 </resources>

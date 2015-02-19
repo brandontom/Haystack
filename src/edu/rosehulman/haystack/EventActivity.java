@@ -48,6 +48,9 @@ public class EventActivity extends Activity {
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
 		sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
+		final TextView numLikes = (TextView) EventActivity.this.findViewById(R.id.num_likes_activity);
+		int num = mEvent.getLikes().size();
+		numLikes.setText(num + (num == 1 ? " like" : " likes"));
 		
 		ImageView rating = (ImageView) findViewById(R.id.event_activity_rating);
 		if(mEvent.getLikes().contains(MainActivity.id)){
@@ -61,13 +64,19 @@ public class EventActivity extends Activity {
 				if(!mEvent.getLikes().contains(MainActivity.id)){
 					Toast.makeText(EventActivity.this, "You like this event!",
 							Toast.LENGTH_SHORT).show();
-					mEvent.like();
+					mEvent.getLikes().add(MainActivity.id);
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+					int num = mEvent.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					mEvent.like();
 				}else{
 					Toast.makeText(EventActivity.this, "You disliked this event!",
 							Toast.LENGTH_SHORT).show();
-					mEvent.unLike();
+					mEvent.getLikes().remove(MainActivity.id);
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+					int num = mEvent.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					mEvent.unLike();
 				}
 			}
 		});
