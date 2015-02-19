@@ -13,7 +13,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -128,9 +131,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		sortSpinnerChoiceNum = mSortSpinner.getSelectedItemPosition();
 		// NOTE: , 0 = Today, 1 = This Week, 2 = This Month 3 = all time
 
-		// TODO:
-		mLat = 39.4836321;
-		mLon = -87.3268569;
 
 		updateEvents();
 	}
@@ -491,7 +491,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	protected void onResume() {
 		mNavigationDrawerFragment.mDrawerLayout.closeDrawers();
 		updateEvents();
-
+		double[] loc = getGPS();
+		mLat = loc[0];
+		mLon = loc[1];
 		super.onResume();
 	}
 
@@ -500,5 +502,25 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mIsRunning = false;
 		super.onDestroy();
 	}
+	
+	private double[] getGPS() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
+        java.util.List<String> providers = lm.getProviders(true);
+        System.out.println(providers);
+        /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
+        Location l = null;
+        
+        for (int i=providers.size()-1; i>=0; i--) {
+                l = lm.getLastKnownLocation(providers.get(i));
+                if (l != null) break;
+        }
+        
+        double[] gps = new double[2];
+        if (l != null) {
+                gps[0] = l.getLatitude();
+                gps[1] = l.getLongitude();
+        }
+        return gps;
+}
 
 }
