@@ -1,5 +1,6 @@
 package edu.rosehulman.haystack;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +9,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoLikes;
+
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Event {
 
@@ -25,7 +32,7 @@ public class Event {
 	private String mAddress;
 	private String mDescription;
 	private String mEventID;
-	private int mUpvotes;
+	private ArrayList<String> mLikes;
 	private String mCategory;
 	private ArrayList<Comment> mComments;
 	private String mLastModified;
@@ -38,7 +45,7 @@ public class Event {
 		mEndMinute = 0;
 		mDescription = "Free Drinks on Tuesdays!";
 		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
-		mUpvotes = 0;
+		mLikes = new ArrayList<String>();
 		mComments = new ArrayList<Comment>();
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
@@ -46,7 +53,7 @@ public class Event {
 
 	public Event(String title, String address, String toDateTime,
 			String fromDateTime, String entityKey, String description,
-			String lastTouchDateTime, List<String> comments) {
+			String lastTouchDateTime, List<String> comments, List<String> likes) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
@@ -54,7 +61,12 @@ public class Event {
 		mEventID = entityKey;
 		mDescription = description;
 		mLastModified = lastTouchDateTime;
-		mUpvotes = 0;
+		mLikes = new ArrayList<String>();
+		if (likes != null) {
+			for (String like : likes) {
+				mLikes.add(like);
+			}
+		}
 
 		mFromDateTime = fromDateTime;
 		mToDateTime = toDateTime;
@@ -151,8 +163,8 @@ public class Event {
 		mComments.add(0, new Comment(comment));
 	}
 
-	public int getUpvotes() {
-		return mUpvotes;
+	public ArrayList<String> getLikes() {
+		return mLikes;
 	}
 
 	public String getCategory() {
@@ -178,6 +190,71 @@ public class Event {
 			comments.add(0, comment.getComment());
 		}
 		return comments;
+	}
+	
+	public List<String> getLikesAsList() {
+		List<String> likes = new ArrayList<String>();
+		for (String like : mLikes) {
+			likes.add(like);
+		}
+		return likes;
+	}
+
+	public void setLikes(List<String> likes) {
+		mLikes = new ArrayList<String>();
+		if (likes != null) {
+			for (String like : likes) {
+				mLikes.add(like);
+			}
+		}
+	}
+
+	public void like() {
+		(new LikeEventTask()).execute(mEventID);
+	}
+
+	public void unLike() {
+		(new LikeEventTask()).execute(mEventID);
+	}
+
+	class LikeEventTask extends AsyncTask<String, Void, DbEventProtoLikes> {
+
+		@Override
+		protected DbEventProtoLikes doInBackground(String... entityKeys) {
+			DbEventProtoLikes returnedQuote = null;
+			try {
+				returnedQuote = MainActivity.mService.dbevent()
+						.likes(entityKeys[0]).execute();
+			} catch (IOException e) {
+				Log.e("BRANDON", "Failed to insert quote" + e);
+			}
+			return returnedQuote;
+		}
+
+		@Override
+		protected void onPostExecute(DbEventProtoLikes result) {
+			super.onPostExecute(result);
+
+			if (result == null) {
+				Log.e("BRANDON", "Result is null. Failed loading.");
+				return;
+			}
+			// result.getItems() could be null
+			setLikes(result.getLikes());
+			if (mLikes.contains(MainActivity.id)) {
+				mLikes.remove(MainActivity.id);
+			}else if (!mLikes.contains(MainActivity.id)) {
+				mLikes.add(MainActivity.id);
+			}
+			DbEvent event = new DbEvent();
+			event.setEntityKey(getId());
+			event.setLikes(getLikesAsList());
+
+			event.setLikesSize((long) mLikes.size());
+
+			(new PostNewEventActivity.InsertEventTask()).execute(event);
+		}
+
 	}
 
 }

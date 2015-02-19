@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -56,6 +57,7 @@ public class PostNewEventActivity extends Activity {
 	private boolean clickedPost;
 	private static final long COMMENT_SIZE = 0;
 	public final static String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
+	private static final long LIKES_SIZE = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +204,7 @@ public class PostNewEventActivity extends Activity {
 		dbevent.setCommentSize(COMMENT_SIZE);
 		dbevent.setLat(mLat);
 		dbevent.setLon(mLon);
+		dbevent.setLikesSize(LIKES_SIZE);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		dbevent.setFromDateTime(sdf.format(fromCal.getTime()));

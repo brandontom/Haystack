@@ -43,6 +43,8 @@
 
     <string-array name="sort_spinner_array">
         <item>Newest</item>
+        <item>Most Liked</item>
+        <item>Trending</item>
         <item>Hot</item>
     </string-array>
     <string-array name="time_spinner_array">
@@ -69,5 +71,6 @@
     <string name="search_radius">Search Radius</string>
     <string name="event_search_">Event Search:</string>
     <string name="settings_activity">Settings Activity</string>
+    <string name="likes_start">0 likes</string>
 
 </resources>

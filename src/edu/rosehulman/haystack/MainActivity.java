@@ -16,6 +16,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,6 +74,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		return RADIUS * c * TO_MILES;
 	}
 
+	public static String id;
+
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -94,6 +97,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		sortSpinnerChoiceNum = 0;
 		mIsRunning = true;
 		mSearchRadius = 20;
+		id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
 
 		mCategory = getResources().getString(R.string.all);
 
@@ -308,12 +312,11 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	}
 
 	public void addDbEvent(DbEvent event) {
-
 		if (mCategory.equals(event.getCategory())
 				|| mCategory.equals(getResources().getString(R.string.all))) {
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
 					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments());
+					event.getLastTouchDateTime(), event.getComments(), event.getLikes());
 			mEvents.add(temp);
 		}
 	}
@@ -432,17 +435,24 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			DbEventCollection quotes = null;
 			try {
 				List query = mService.dbevent().list();
-				query.setOrder("-last_touch_date_time");
 
 				if (sortSpinnerChoiceNum == 0) {
-//					query.setOrder("-comment_size");
-				}else if (sortSpinnerChoiceNum == 1){
-					
-				}else if (sortSpinnerChoiceNum == 2){
-					
-				}else if (sortSpinnerChoiceNum == 3){
-					
-				}else{
+					query.setOrder("-likes_size");
+					query.setOrder("-created_date_time");
+
+				} else if (sortSpinnerChoiceNum == 1) {
+					query.setOrder("-created_date_time");
+					query.setOrder("-likes_size");
+
+				} else if (sortSpinnerChoiceNum == 2) {
+					query.setOrder("-likes_size");
+					query.setOrder("-last_touch_date_time");
+
+				} else if (sortSpinnerChoiceNum == 3) {
+					query.setOrder("-likes_size");
+					query.setOrder("-comments_size");
+
+				} else {
 					Log.d(HS, "sort spinner index out of bounds");
 				}
 				query.setLimit(50L);

@@ -2,11 +2,13 @@ package edu.rosehulman.haystack;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RowViewAdapter extends BaseAdapter {
@@ -51,13 +53,36 @@ public class RowViewAdapter extends BaseAdapter {
 		final Event event = (Event) getItem(position);
 		
 		ImageView rating = (ImageView) view.findViewById(R.id.rowview_rating);
+		if(event.getLikes().contains(MainActivity.id)){
+			rating.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+		}else{
+			rating.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+		}
+		final TextView numLikes = (TextView) view.findViewById(R.id.num_likes);
+		int num = event.getLikes().size();
+		numLikes.setText(num + (num == 1 ? " like" : " likes"));
 		rating.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				//do whatever to like the event.
-				Toast.makeText(mContext, "You like this event!",
-						Toast.LENGTH_SHORT).show();
+				if(!event.getLikes().contains(MainActivity.id)){
+					Toast.makeText(mContext, "You like this event!",
+							Toast.LENGTH_SHORT).show();
+					event.getLikes().add(MainActivity.id);
+					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+					int num = event.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					event.like();
+				}else{
+					Toast.makeText(mContext, "You disliked this event!",
+							Toast.LENGTH_SHORT).show();
+					event.getLikes().remove(MainActivity.id);
+					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+					int num = event.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					event.unLike();
+				}
 			}
 		});
 		// Fill the view with data

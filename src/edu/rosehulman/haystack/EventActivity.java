@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,38 @@ public class EventActivity extends Activity {
 		mComments = (ListView) findViewById(R.id.event_activity_comment_listview);
 		sendButton = (Button) findViewById(R.id.event_activity_send_comment);
 		mComment = (EditText) findViewById(R.id.event_activity_edit_comment);
+		final TextView numLikes = (TextView) EventActivity.this.findViewById(R.id.num_likes_activity);
+		int num = mEvent.getLikes().size();
+		numLikes.setText(num + (num == 1 ? " like" : " likes"));
+		
+		ImageView rating = (ImageView) findViewById(R.id.event_activity_rating);
+		if(mEvent.getLikes().contains(MainActivity.id)){
+			rating.setImageDrawable(this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+		}
+		rating.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//do whatever to like the event.
+				if(!mEvent.getLikes().contains(MainActivity.id)){
+					Toast.makeText(EventActivity.this, "You like this event!",
+							Toast.LENGTH_SHORT).show();
+					mEvent.getLikes().add(MainActivity.id);
+					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+					int num = mEvent.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					mEvent.like();
+				}else{
+					Toast.makeText(EventActivity.this, "You disliked this event!",
+							Toast.LENGTH_SHORT).show();
+					mEvent.getLikes().remove(MainActivity.id);
+					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+					int num = mEvent.getLikes().size();
+					numLikes.setText(num + (num == 1 ? " like" : " likes"));
+					mEvent.unLike();
+				}
+			}
+		});
 
 		TextView time = (TextView) findViewById(R.id.event_activity_time);
 
@@ -63,8 +98,9 @@ public class EventActivity extends Activity {
 				if (text.isEmpty()) {
 					return;
 				}
-				mComment.clearFocus();
-				sendButton.requestFocus();
+				InputMethodManager imm = (InputMethodManager)getSystemService(
+					      Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(mComment.getWindowToken(), 0);
 				addComment(text);
 			}
 		});
