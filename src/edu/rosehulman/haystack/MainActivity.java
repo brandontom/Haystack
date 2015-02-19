@@ -74,6 +74,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		return RADIUS * c * TO_MILES;
 	}
 
+	private double mLat;
+	private double mLon;
+
 	public static String id;
 
 	/**
@@ -124,6 +127,10 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		timeSpinnerChoiceNum = mTimeSpinner.getSelectedItemPosition();
 		sortSpinnerChoiceNum = mSortSpinner.getSelectedItemPosition();
 		// NOTE: , 0 = Today, 1 = This Week, 2 = This Month 3 = all time
+
+		// TODO:
+		mLat = 39.4836321;
+		mLon = -87.3268569;
 
 		updateEvents();
 	}
