@@ -113,9 +113,9 @@
         android:id="@+id/num_likes_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/event_activity_description"
+        android:layout_below="@+id/event_activity_rating"
         android:layout_alignParentRight="true"
-        android:padding="10dp"
+        android:paddingRight="10dp"
         android:text="@string/likes_start" />
 
     <TextView
