@@ -46,9 +46,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private SideSwipeFragment mNavigationDrawerFragment;
 
 	public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
-
 	public static final String MQ = "MQ";
-
 	public static final String HS = "HS";
 
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
@@ -59,6 +57,21 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private Spinner mTimeSpinner;
 	public static String mCategory;
 	public static boolean mIsRunning;
+	public static final double RADIUS = 6327.8;
+	public static final double TO_MILES = 0.62137;
+
+	public static double haversine(double lat1, double lon1, double lat2, double lon2) {
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLon = Math.toRadians(lon2 - lon1);
+
+		lat1 = Math.toRadians(lat1);
+		lat2 = Math.toRadians(lat2);
+
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2)
+				* Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+		double c = 2 * Math.asin(Math.sqrt(a));
+		return RADIUS * c * TO_MILES;
+	}
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -69,7 +82,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private int timeSpinnerChoiceNum;
 	// NOTE: 0 = all time, 1 = Today, 2 = This Week, 3 = This Month
 
-	private boolean sortSpinnerHotSelected;
+	private int sortSpinnerChoiceNum;
 	// if true, list in order of size of comments
 
 	public static Haystack mService;
@@ -78,7 +91,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		sortSpinnerHotSelected = false;
+		sortSpinnerChoiceNum = 0;
 		mIsRunning = true;
 		mSearchRadius = 20;
 
@@ -105,6 +118,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		// if mTimeSpinner is for all time,
 		timeSpinnerChoiceNum = mTimeSpinner.getSelectedItemPosition();
+		sortSpinnerChoiceNum = mSortSpinner.getSelectedItemPosition();
 		// NOTE: , 0 = Today, 1 = This Week, 2 = This Month 3 = all time
 
 		updateEvents();
@@ -122,20 +136,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (mSortSpinner.getSelectedItem().equals(
-						getResources().getStringArray(R.array.sort_spinner_array)[1])) {
-					// HOT
-					Log.d(HS, "selected HOT in sortspinner");
-					sortSpinnerHotSelected = true;
-					updateEvents();
-
-				} else if (mSortSpinner.getSelectedItem().equals(
-						getResources().getStringArray(R.array.sort_spinner_array)[0])) {
-					sortSpinnerHotSelected = false;
-					updateEvents();
-				} else {
-					Log.d(HS, "sortspinner selected position out of bounds");
-				}
+				updateEvents();
 			}
 
 			@Override
@@ -175,8 +176,10 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		mEvents = new ArrayList<Event>();
 		for (DbEvent event : list) {
-			filterEventByTime(event);
-			filterEventByLocation(event);
+			if (filterEventByTime(event)) {
+				addDbEvent(event);
+
+			}
 		}
 		final RowViewAdapter adapter = new RowViewAdapter(this, mEvents);
 
@@ -193,11 +196,61 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		});
 	}
 
-	private void filterEventByLocation(DbEvent event) {
-		//TODO
+	private boolean filterEventByLocation(DbEvent event) {
+		// TODO
+
+		// double eLat= event.getLat();
+		// double eLng= event.getLon();
+		// double mLat= 0; //TODO:
+		// double mLng = 0; //TODO:
+		// haversine(eLat, eLng, mLat, mLng);
+
+		// LocationManager mlocManager = (LocationManager)
+		// getSystemService(Context.LOCATION_SERVICE);
+		//
+		// LocationListener mlocListener = new MyLocationListener();
+		// mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+		// 0, mlocListener);
+		//
+		return true;
+
 	}
 
-	private void filterEventByTime(DbEvent event) {
+	/* Class My Location Listener */
+	// public class MyLocationListener implements LocationListener {
+	//
+	// @Override
+	// public void onLocationChanged(Location loc) {
+	//
+	// loc.getLatitude();
+	// loc.getLongitude();
+	//
+	// String text = "My current location is: " + "Latitude = " +
+	// loc.getLatitude()
+	// + "Longitude = " + loc.getLongitude();
+	// Log.d(HS, text);
+	// Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+	// }
+	//
+	// @Override
+	// public void onProviderDisabled(String provider) {
+	// Toast.makeText(getApplicationContext(), "Gps Disabled",
+	// Toast.LENGTH_SHORT).show();
+	// }
+	//
+	// @Override
+	// public void onProviderEnabled(String provider) {
+	// Toast.makeText(getApplicationContext(), "Gps Enabled",
+	// Toast.LENGTH_SHORT).show();
+	// }
+	//
+	// @Override
+	// public void onStatusChanged(String provider, int status, Bundle extras) {
+	//
+	// }
+	// }
+
+	private boolean filterEventByTime(DbEvent event) {
 		GregorianCalendar current = new GregorianCalendar();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
@@ -221,36 +274,37 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				|| mToCalendar.getTimeInMillis() >= current.getTimeInMillis()) {
 
 			if (timeSpinnerChoiceNum == 3) {
-
-				addDbEvent(event);
+				return true;
 			} else if (timeSpinnerChoiceNum == 0) {
 				// TODAY
 				current.add(Calendar.DATE, 1);
 				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
 						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-					addDbEvent(event);
+					return true;
 				}
 			} else if (timeSpinnerChoiceNum == 1) {
 				// This week
 				current.add(Calendar.WEEK_OF_YEAR, 1);
 				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
 						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-					addDbEvent(event);
+					return true;
 				}
 			} else if (timeSpinnerChoiceNum == 2) {
 				// This month
 				current.add(Calendar.MONTH, 1);
 				if (mFromCalendar.getTimeInMillis() < current.getTimeInMillis()
 						|| mToCalendar.getTimeInMillis() < current.getTimeInMillis()) {
-					addDbEvent(event);
+					return true;
 				}
 			} else {
 				Log.d("MIN", "timespinnerchoicenum out of bounds");
+				return false;
 			}
 		} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
 				.getTimeInMillis() <= current.getTimeInMillis())) {
-			addDbEvent(event);
+			return true;
 		}
+		return false;
 	}
 
 	public void addDbEvent(DbEvent event) {
@@ -380,8 +434,16 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				List query = mService.dbevent().list();
 				query.setOrder("-last_touch_date_time");
 
-				if (sortSpinnerHotSelected) {
-					query.setOrder("-comment_size");
+				if (sortSpinnerChoiceNum == 0) {
+//					query.setOrder("-comment_size");
+				}else if (sortSpinnerChoiceNum == 1){
+					
+				}else if (sortSpinnerChoiceNum == 2){
+					
+				}else if (sortSpinnerChoiceNum == 3){
+					
+				}else{
+					Log.d(HS, "sort spinner index out of bounds");
 				}
 				query.setLimit(50L);
 				quotes = query.execute();
@@ -412,6 +474,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	protected void onResume() {
 		mNavigationDrawerFragment.mDrawerLayout.closeDrawers();
 		updateEvents();
+
 		super.onResume();
 	}
 
