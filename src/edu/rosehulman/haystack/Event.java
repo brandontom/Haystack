@@ -117,7 +117,7 @@ public class Event {
 		if (date < 10) {
 			day = "0" + day;
 		}
-		return month + " " + day;
+		return "<b>" + month + " " + day + "</b>";
 	}
 
 	public String getEndDate() {
@@ -127,7 +127,7 @@ public class Event {
 		if (date < 10) {
 			day = "0" + day;
 		}
-		return month + " " + day;
+		return "<b>" + month + " " + day + "</b>";
 	}
 
 	public String getStartTime() {

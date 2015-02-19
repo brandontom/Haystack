@@ -405,21 +405,17 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				if (sortSpinnerChoiceNum == 0) {
 					query.setOrder("-likes_size");
 					query.setOrder("-created_date_time");
-					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 1) {
 					query.setOrder("-created_date_time");
 					query.setOrder("-likes_size");
-					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 2) {
 					query.setOrder("-last_touch_date_time");
-					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 3) {
 					query.setOrder("-likes_size");
 					query.setOrder("-comment_size");
-					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else {
 					Log.d(HS, "sort spinner index out of bounds");

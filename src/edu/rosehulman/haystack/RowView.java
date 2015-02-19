@@ -1,12 +1,13 @@
 package edu.rosehulman.haystack;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RowView extends LinearLayout {
-	
+
 	private TextView mTitleTextView;
 	private TextView mTimeTextView;
 	private TextView mDescriptionTextView;
@@ -24,9 +25,10 @@ public class RowView extends LinearLayout {
 	}
 
 	public void setTimeText(String string) {
-		mTimeTextView.setText(string);
+		mTimeTextView.setText(Html.fromHtml(string));
+
 	}
-	
+
 	public void setDescriptionText(String string) {
 		mDescriptionTextView.setText(string);
 	}

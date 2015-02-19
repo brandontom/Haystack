@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/Black"
     android:orientation="horizontal" >
 
     <LinearLayout
@@ -18,7 +17,6 @@
             android:layout_gravity="left"
             android:gravity="left"
             android:text="@string/event_title"
-            android:textColor="#FFF"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -29,7 +27,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="10dp"
             android:text="@string/event_time"
-            android:textColor="#FFF"
+            android:textColor="@color/Gray"
             android:textSize="15sp" />
 
         <TextView
@@ -39,7 +37,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="10dp"
             android:text="@string/event_description"
-            android:textColor="#FFF"
+            android:textColor="@color/Gray"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -63,10 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:textColor="#FFF"
-            android:textSize="12sp"
-            android:text="@string/likes_start" />
-        
+            android:text="@string/likes_start"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>
