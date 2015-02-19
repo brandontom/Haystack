@@ -10,8 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoLikes;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoCommentsLikes;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -217,14 +216,14 @@ public class Event {
 		(new LikeEventTask()).execute(mEventID);
 	}
 
-	class LikeEventTask extends AsyncTask<String, Void, DbEventProtoLikes> {
+	class LikeEventTask extends AsyncTask<String, Void, DbEventProtoCommentsLikes> {
 
 		@Override
-		protected DbEventProtoLikes doInBackground(String... entityKeys) {
-			DbEventProtoLikes returnedQuote = null;
+		protected DbEventProtoCommentsLikes doInBackground(String... entityKeys) {
+			DbEventProtoCommentsLikes returnedQuote = null;
 			try {
 				returnedQuote = MainActivity.mService.dbevent()
-						.likes(entityKeys[0]).execute();
+						.one(entityKeys[0]).execute();
 			} catch (IOException e) {
 				Log.e("BRANDON", "Failed to insert quote" + e);
 			}
@@ -232,7 +231,7 @@ public class Event {
 		}
 
 		@Override
-		protected void onPostExecute(DbEventProtoLikes result) {
+		protected void onPostExecute(DbEventProtoCommentsLikes result) {
 			super.onPostExecute(result);
 
 			if (result == null) {
@@ -246,9 +245,11 @@ public class Event {
 			}else if (!mLikes.contains(MainActivity.id)) {
 				mLikes.add(MainActivity.id);
 			}
+			setComments(result.getComments());
 			DbEvent event = new DbEvent();
 			event.setEntityKey(getId());
 			event.setLikes(getLikesAsList());
+			event.setComments(getCommentsAsList());
 
 			event.setLikesSize((long) mLikes.size());
 

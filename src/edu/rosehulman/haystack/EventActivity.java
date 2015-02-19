@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoCommentsLikes;
 
 public class EventActivity extends Activity {
 
@@ -123,13 +123,13 @@ public class EventActivity extends Activity {
 		mComments.setAdapter(mAdapter);
 	}
 
-	class PostComment extends AsyncTask<String, Void, DbEventProtoComments> {
+	class PostComment extends AsyncTask<String, Void, DbEventProtoCommentsLikes> {
 
 		@Override
-		protected DbEventProtoComments doInBackground(String... entityKeys) {
-			DbEventProtoComments returnedQuote = null;
+		protected DbEventProtoCommentsLikes doInBackground(String... entityKeys) {
+			DbEventProtoCommentsLikes returnedQuote = null;
 			try {
-				returnedQuote = MainActivity.mService.dbevent().comments(entityKeys[0]).execute();
+				returnedQuote = MainActivity.mService.dbevent().one(entityKeys[0]).execute();
 			} catch (IOException e) {
 				Log.e("BRANDON", "Failed to insert quote" + e);
 			}
@@ -137,7 +137,7 @@ public class EventActivity extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(DbEventProtoComments result) {
+		protected void onPostExecute(DbEventProtoCommentsLikes result) {
 			super.onPostExecute(result);
 
 			if (result == null) {
@@ -147,10 +147,12 @@ public class EventActivity extends Activity {
 			// result.getItems() could be null
 			mEvent.setComments(result.getComments());
 			mEvent.addComment(mRecentComment);
+			mEvent.setLikes(result.getLikes());
 
 			DbEvent event = new DbEvent();
 			event.setEntityKey(mEvent.getId());
 			event.setComments(mEvent.getCommentsAsList());
+			event.setLikes(mEvent.getLikesAsList());
 
 			event.setCommentSize((long) mEvent.getComments().size());
 
