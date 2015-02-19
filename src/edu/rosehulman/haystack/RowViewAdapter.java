@@ -2,6 +2,7 @@ package edu.rosehulman.haystack;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,8 +90,7 @@ public class RowViewAdapter extends BaseAdapter {
 		// Fill the view with data
 
 		view.setTitleText(event.getTitle());
-		view.setTimeText(event.getStartDate() + " " + event.getStartTime() + " - "
-				+ event.getEndDate() + " " + event.getEndTime());
+		view.setTimeText(event.getDateString());
 		view.setDescriptionText(event.getShortDescription());
 		return view;
 	}
