@@ -339,7 +339,9 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			return true;
+			Intent settings = new Intent(this,
+					SettingsActivity.class);
+			startActivity(settings);
 		} else if (id == R.id.update_events) {
 			updateEvents();
 		}
