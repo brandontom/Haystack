@@ -86,7 +86,7 @@ public class EventActivity extends Activity {
 		address.setText(mEvent.getAddress());
 		title.setText(mEvent.getTitle());
 		description.setText(mEvent.getFullDescription());
-		time.setText(mEvent.getStartTime() + " - " + mEvent.getEndTime());
+		time.setText(mEvent.getDateString());
 
 		setUpListView();
 

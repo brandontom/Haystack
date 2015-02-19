@@ -100,7 +100,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		sortSpinnerChoiceNum = 0;
 		mIsRunning = true;
 		mSearchRadius = 20;
 		id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
@@ -131,7 +130,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		sortSpinnerChoiceNum = mSortSpinner.getSelectedItemPosition();
 		// NOTE: , 0 = Today, 1 = This Week, 2 = This Month 3 = all time
 
-
 		updateEvents();
 	}
 
@@ -147,6 +145,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				sortSpinnerChoiceNum = position;
 				updateEvents();
 			}
 
@@ -339,8 +338,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			Intent settings = new Intent(this,
-					SettingsActivity.class);
+			Intent settings = new Intent(this, SettingsActivity.class);
 			startActivity(settings);
 		} else if (id == R.id.update_events) {
 			updateEvents();
@@ -407,18 +405,21 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				if (sortSpinnerChoiceNum == 0) {
 					query.setOrder("-likes_size");
 					query.setOrder("-created_date_time");
+					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 1) {
 					query.setOrder("-created_date_time");
 					query.setOrder("-likes_size");
+					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 2) {
-					query.setOrder("-likes_size");
 					query.setOrder("-last_touch_date_time");
+					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else if (sortSpinnerChoiceNum == 3) {
 					query.setOrder("-likes_size");
-					query.setOrder("-comments_size");
+					query.setOrder("-comment_size");
+					Log.d(HS, "sort Spinner" + sortSpinnerChoiceNum);
 
 				} else {
 					Log.d(HS, "sort spinner index out of bounds");
@@ -463,25 +464,29 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		mIsRunning = false;
 		super.onDestroy();
 	}
-	
+
 	private double[] getGPS() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
-        java.util.List<String> providers = lm.getProviders(true);
-        System.out.println(providers);
-        /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
-        Location l = null;
-        
-        for (int i=providers.size()-1; i>=0; i--) {
-                l = lm.getLastKnownLocation(providers.get(i));
-                if (l != null) break;
-        }
-        
-        double[] gps = new double[2];
-        if (l != null) {
-                gps[0] = l.getLatitude();
-                gps[1] = l.getLongitude();
-        }
-        return gps;
-}
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		java.util.List<String> providers = lm.getProviders(true);
+		System.out.println(providers);
+		/*
+		 * Loop over the array backwards, and if you get an accurate location,
+		 * then break out the loop
+		 */
+		Location l = null;
+
+		for (int i = providers.size() - 1; i >= 0; i--) {
+			l = lm.getLastKnownLocation(providers.get(i));
+			if (l != null)
+				break;
+		}
+
+		double[] gps = new double[2];
+		if (l != null) {
+			gps[0] = l.getLatitude();
+			gps[1] = l.getLongitude();
+		}
+		return gps;
+	}
 
 }

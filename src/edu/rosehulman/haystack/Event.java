@@ -1,6 +1,7 @@
 package edu.rosehulman.haystack;
 
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,13 +10,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoLikes;
-
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoLikes;
 
 public class Event {
 
@@ -36,6 +35,8 @@ public class Event {
 	private String mCategory;
 	private ArrayList<Comment> mComments;
 	private String mLastModified;
+	private DateFormatSymbols dfs = new DateFormatSymbols();
+	private String[] months = dfs.getMonths();
 
 	public Event() {
 		mTitle = "Action Center Plaza";
@@ -51,9 +52,9 @@ public class Event {
 		mToCalendar = new GregorianCalendar();
 	}
 
-	public Event(String title, String address, String toDateTime,
-			String fromDateTime, String entityKey, String description,
-			String lastTouchDateTime, List<String> comments, List<String> likes) {
+	public Event(String title, String address, String toDateTime, String fromDateTime,
+			String entityKey, String description, String lastTouchDateTime, List<String> comments,
+			List<String> likes) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
@@ -95,15 +96,6 @@ public class Event {
 			}
 		}
 
-		// String[] ar = fromDateTime.split(":");
-		// mStartMinute = Integer.parseInt(ar[1]);
-		// mStartHour = Integer.parseInt(ar[0].substring(ar[0].length()-2,
-		// ar[0].length()));
-		// ar = toDateTime.split(":");
-		// mEndMinute = Integer.parseInt(ar[1]);
-		// mEndHour = Integer.parseInt(ar[0].substring(ar[0].length()-2,
-		// ar[0].length()));
-
 	}
 
 	public GregorianCalendar getFromDate() {
@@ -119,6 +111,26 @@ public class Event {
 		return mTitle;
 	}
 
+	public String getStartDate() {
+		String month = months[mFromCalendar.get(Calendar.MONTH)].substring(0, 3);
+		int date = mFromCalendar.get(Calendar.DAY_OF_MONTH);
+		String day = date + "";
+		if (date < 10) {
+			day = "0" + day;
+		}
+		return month + " " + day;
+	}
+
+	public String getEndDate() {
+		String month = months[mToCalendar.get(Calendar.MONTH)].substring(0, 3);
+		int date = mToCalendar.get(Calendar.DAY_OF_MONTH);
+		String day = date + "";
+		if (date < 10) {
+			day = "0" + day;
+		}
+		return month + " " + day;
+	}
+
 	public String getStartTime() {
 		return convertTime(mStartHour, mStartMinute);
 	}
@@ -128,9 +140,8 @@ public class Event {
 	}
 
 	public static String convertTime(int hour, int minute) {
-		return (hour % 12 != 0 ? hour % 12 : 12) + ":"
-				+ (minute < 10 ? "0" + minute : minute) + " "
-				+ (hour / 12 == 1 ? "PM" : "AM");
+		return (hour % 12 != 0 ? hour % 12 : 12) + ":" + (minute < 10 ? "0" + minute : minute)
+				+ " " + (hour / 12 == 1 ? "PM" : "AM");
 	}
 
 	public String getShortDescription() {
@@ -191,7 +202,7 @@ public class Event {
 		}
 		return comments;
 	}
-	
+
 	public List<String> getLikesAsList() {
 		List<String> likes = new ArrayList<String>();
 		for (String like : mLikes) {
@@ -223,8 +234,7 @@ public class Event {
 		protected DbEventProtoLikes doInBackground(String... entityKeys) {
 			DbEventProtoLikes returnedQuote = null;
 			try {
-				returnedQuote = MainActivity.mService.dbevent()
-						.likes(entityKeys[0]).execute();
+				returnedQuote = MainActivity.mService.dbevent().likes(entityKeys[0]).execute();
 			} catch (IOException e) {
 				Log.e("BRANDON", "Failed to insert quote" + e);
 			}
@@ -243,7 +253,7 @@ public class Event {
 			setLikes(result.getLikes());
 			if (mLikes.contains(MainActivity.id)) {
 				mLikes.remove(MainActivity.id);
-			}else if (!mLikes.contains(MainActivity.id)) {
+			} else if (!mLikes.contains(MainActivity.id)) {
 				mLikes.add(MainActivity.id);
 			}
 			DbEvent event = new DbEvent();
@@ -255,6 +265,11 @@ public class Event {
 			(new PostNewEventActivity.InsertEventTask()).execute(event);
 		}
 
+	}
+
+	public String getDateString() {
+
+		return getStartDate() + " " + getStartTime() + " - " + getEndDate() + " " + getEndTime();
 	}
 
 }
