@@ -218,49 +218,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 			return false;
 		}
 
-		// LocationManager mlocManager = (LocationManager)
-		// getSystemService(Context.LOCATION_SERVICE);
-		//
-		// LocationListener mlocListener = new MyLocationListener();
-		// mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-		// 0, mlocListener);
-		//
-
 	}
-
-	/* Class My Location Listener */
-	// public class MyLocationListener implements LocationListener {
-	//
-	// @Override
-	// public void onLocationChanged(Location loc) {
-	//
-	// loc.getLatitude();
-	// loc.getLongitude();
-	//
-	// String text = "My current location is: " + "Latitude = " +
-	// loc.getLatitude()
-	// + "Longitude = " + loc.getLongitude();
-	// Log.d(HS, text);
-	// Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-	// }
-	//
-	// @Override
-	// public void onProviderDisabled(String provider) {
-	// Toast.makeText(getApplicationContext(), "Gps Disabled",
-	// Toast.LENGTH_SHORT).show();
-	// }
-	//
-	// @Override
-	// public void onProviderEnabled(String provider) {
-	// Toast.makeText(getApplicationContext(), "Gps Enabled",
-	// Toast.LENGTH_SHORT).show();
-	// }
-	//
-	// @Override
-	// public void onStatusChanged(String provider, int status, Bundle extras) {
-	//
-	// }
-	// }
 
 	private boolean filterEventByTime(DbEvent event) {
 		GregorianCalendar current = new GregorianCalendar();
