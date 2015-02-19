@@ -153,6 +153,8 @@ public class Event {
 	public String getShortDescription() {
 		if (mDescription == null) {
 			return "No Description";
+		}else if(mDescription.equals("")){
+			return " ";
 		}
 		if (mDescription.length() > MAX_DESC_LENGTH) {
 			return mDescription.substring(0, MAX_DESC_LENGTH) + "...";
