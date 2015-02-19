@@ -9,12 +9,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
-import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoCommentsLikes;
-
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoCommentsLikes;
 
 public class Event {
 
@@ -34,7 +33,6 @@ public class Event {
 	private ArrayList<String> mLikes;
 	private String mCategory;
 	private ArrayList<Comment> mComments;
-	private String mLastModified;
 
 	public Event() {
 		mTitle = "Action Center Plaza";
@@ -59,7 +57,6 @@ public class Event {
 		mAddress = address;
 		mEventID = entityKey;
 		mDescription = description;
-		mLastModified = lastTouchDateTime;
 		mLikes = new ArrayList<String>();
 		if (likes != null) {
 			for (String like : likes) {
