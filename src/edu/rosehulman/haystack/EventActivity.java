@@ -42,6 +42,12 @@ public class EventActivity extends Activity {
 
 		mEvent = getEventByPosition(pos);
 		mRecentComment = null;
+		
+		TextView distanceView = (TextView) findViewById(R.id.distance);
+		double eLat = mEvent.getLat();
+		double eLon = mEvent.getLon();
+		double distance = MainActivity.haversine(eLat, eLon, MainActivity.mLat, MainActivity.mLon);
+		distanceView.setText(getResources().getString(R.string._1f_miles_away, distance));
 
 		TextView address = (TextView) findViewById(R.id.event_activity_address);
 		TextView title = (TextView) findViewById(R.id.event_activity_title);
