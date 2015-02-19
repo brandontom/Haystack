@@ -90,6 +90,10 @@ public class EventActivity extends Activity {
 					mEvent.unLike();
 				}
 			}
+			
+
+			
+
 		});
 
 		TextView time = (TextView) findViewById(R.id.event_activity_time);
@@ -114,6 +118,20 @@ public class EventActivity extends Activity {
 				addComment(text);
 			}
 		});
+		String[] categories = getResources()
+				.getStringArray(R.array.category_spinner_array);
+		View view = address.getRootView();
+		if (mEvent.getCategory().equals(categories[0])) {
+			view.setBackgroundColor(getResources().getColor(R.color.Light_Red));
+		} else if (mEvent.getCategory().equals(categories[1])) {
+			view.setBackgroundColor(getResources().getColor(R.color.Light_Purple));
+		} else if (mEvent.getCategory().equals(categories[2])) {
+			view.setBackgroundColor(getResources().getColor(R.color.Light_Green));
+		} else if (mEvent.getCategory().equals(categories[3])) {
+			view.setBackgroundColor(getResources().getColor(R.color.Light_Blue));
+		} else if (mEvent.getCategory().equals(categories[4])) {
+			view.setBackgroundColor(getResources().getColor(R.color.Light_Grey));
+		}
 	}
 
 	private Event getEventByPosition(int pos) {
