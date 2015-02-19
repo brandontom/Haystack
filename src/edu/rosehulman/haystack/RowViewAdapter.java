@@ -53,6 +53,8 @@ public class RowViewAdapter extends BaseAdapter {
 		ImageView rating = (ImageView) view.findViewById(R.id.rowview_rating);
 		if(event.getLikes().contains(MainActivity.id)){
 			rating.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+		}else{
+			rating.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_off));
 		}
 		rating.setOnClickListener(new View.OnClickListener() {
 			
@@ -62,12 +64,12 @@ public class RowViewAdapter extends BaseAdapter {
 				if(!event.getLikes().contains(MainActivity.id)){
 					Toast.makeText(mContext, "You like this event!",
 							Toast.LENGTH_SHORT).show();
-					event.like(MainActivity.id);
+					event.like();
 					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_on));
 				}else{
 					Toast.makeText(mContext, "You disliked this event!",
 							Toast.LENGTH_SHORT).show();
-					event.unLike(MainActivity.id);
+					event.unLike();
 					((ImageView) v).setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.btn_star_big_off));
 				}
 			}

@@ -61,12 +61,12 @@ public class EventActivity extends Activity {
 				if(!mEvent.getLikes().contains(MainActivity.id)){
 					Toast.makeText(EventActivity.this, "You like this event!",
 							Toast.LENGTH_SHORT).show();
-					mEvent.like(MainActivity.id);
+					mEvent.like();
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_on));
 				}else{
 					Toast.makeText(EventActivity.this, "You disliked this event!",
 							Toast.LENGTH_SHORT).show();
-					mEvent.unLike(MainActivity.id);
+					mEvent.unLike();
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(android.R.drawable.btn_star_big_off));
 				}
 			}

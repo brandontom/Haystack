@@ -1,5 +1,6 @@
 package edu.rosehulman.haystack;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +9,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoComments;
+import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoLikes;
+
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Event {
 
@@ -184,13 +191,70 @@ public class Event {
 		}
 		return comments;
 	}
-
-	public void like(String id) {
-		mLikes.add(id);
+	
+	public List<String> getLikesAsList() {
+		List<String> likes = new ArrayList<String>();
+		for (String like : mLikes) {
+			likes.add(like);
+		}
+		return likes;
 	}
 
-	public void unLike(String id) {
-		mLikes.remove(id);
+	public void setLikes(List<String> likes) {
+		mLikes = new ArrayList<String>();
+		if (likes != null) {
+			for (String like : likes) {
+				mLikes.add(like);
+			}
+		}
+	}
+
+	public void like() {
+		(new LikeEventTask()).execute(mEventID);
+	}
+
+	public void unLike() {
+		(new LikeEventTask()).execute(mEventID);
+	}
+
+	class LikeEventTask extends AsyncTask<String, Void, DbEventProtoLikes> {
+
+		@Override
+		protected DbEventProtoLikes doInBackground(String... entityKeys) {
+			DbEventProtoLikes returnedQuote = null;
+			try {
+				returnedQuote = MainActivity.mService.dbevent()
+						.likes(entityKeys[0]).execute();
+			} catch (IOException e) {
+				Log.e("BRANDON", "Failed to insert quote" + e);
+			}
+			return returnedQuote;
+		}
+
+		@Override
+		protected void onPostExecute(DbEventProtoLikes result) {
+			super.onPostExecute(result);
+
+			if (result == null) {
+				Log.e("BRANDON", "Result is null. Failed loading.");
+				return;
+			}
+			// result.getItems() could be null
+			setLikes(result.getLikes());
+			if (mLikes.contains(MainActivity.id)) {
+				mLikes.remove(MainActivity.id);
+			}else if (!mLikes.contains(MainActivity.id)) {
+				mLikes.add(MainActivity.id);
+			}
+			DbEvent event = new DbEvent();
+			event.setEntityKey(getId());
+			event.setLikes(getLikesAsList());
+
+			event.setLikesSize((long) mLikes.size());
+
+			(new PostNewEventActivity.InsertEventTask()).execute(event);
+		}
+
 	}
 
 }
