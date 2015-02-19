@@ -37,6 +37,8 @@ public class Event {
 
 	private DateFormatSymbols dfs = new DateFormatSymbols();
 	private String[] months = dfs.getMonths();
+	private double mLat;
+	private double mLon;
 
 	public Event() {
 		mTitle = "Action Center Plaza";
@@ -50,11 +52,13 @@ public class Event {
 		mComments = new ArrayList<Comment>();
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
+		mLat = 0;
+		mLon = 0;
 	}
 
 	public Event(String title, String address, String toDateTime, String fromDateTime,
 			String entityKey, String description, String lastTouchDateTime, List<String> comments,
-			List<String> likes) {
+			List<String> likes, Double lat, Double lon) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
@@ -67,6 +71,8 @@ public class Event {
 				mLikes.add(like);
 			}
 		}
+		mLat = lat;
+		mLon = lon;
 
 		mFromDateTime = fromDateTime;
 		mToDateTime = toDateTime;
@@ -272,6 +278,14 @@ public class Event {
 	public String getDateString() {
 
 		return getStartDate() + " " + getStartTime() + " - " + getEndDate() + " " + getEndTime();
+	}
+
+	public double getLat() {
+		return mLat;
+	}
+
+	public double getLon() {
+		return mLon;
 	}
 
 }

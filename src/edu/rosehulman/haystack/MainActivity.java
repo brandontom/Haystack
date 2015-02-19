@@ -77,8 +77,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 		return RADIUS * c * TO_MILES;
 	}
 
-	private double mLat;
-	private double mLon;
+	static double mLat;
+	static double mLon;
 
 	public static String id;
 
@@ -281,7 +281,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				|| mCategory.equals(getResources().getString(R.string.all))) {
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
 					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments(), event.getLikes());
+					event.getLastTouchDateTime(), event.getComments(), event.getLikes(), event.getLat(), event.getLon());
 			mEvents.add(temp);
 		}
 	}

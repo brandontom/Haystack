@@ -72,5 +72,8 @@
     <string name="event_search_">Event Search:</string>
     <string name="settings_activity">Settings Activity</string>
     <string name="likes_start">0 likes</string>
+    <string name="distance">distance</string>
+    <string name="_1f_miles_away">%.1f mi</string>
+    <string name="entertainment">Entertainment</string>
 
 </resources>

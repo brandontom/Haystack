@@ -11,6 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
+        
+        
+        <ImageView
+            android:id="@+id/background_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/main_background"
+            android:contentDescription="@string/entertainment" />
 
         <RelativeLayout
             android:id="@+id/linear_text"
@@ -49,6 +59,8 @@
             android:layout_below="@id/linear_text"
             android:scrollbars="vertical" >
         </ListView>
+
+
     </RelativeLayout>
 
     <fragment
