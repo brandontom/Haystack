@@ -69,7 +69,7 @@
     <string name="_10_mile_radius">10 Mile Radius</string>
     <string name="_5_mile_radius">5 Mile Radius</string>
     <string name="search_radius">Search Radius</string>
-    <string name="event_search_">Event Search:</string>
+    <string name="event_search_">Search Radius:</string>
     <string name="settings_activity">Settings Activity</string>
     <string name="likes_start">0 likes</string>
     <string name="distance">distance</string>
