@@ -210,8 +210,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		double eLat = event.getLat();
 		double eLon = event.getLon();
-
-		if (haversine(eLat, eLon, mLat, mLon) < mSearchRadius) {
+		double distance = haversine(eLat, eLon, mLat, mLon);
+		if (distance < mSearchRadius) {
 			return true;
 		} else {
 			return false;
