@@ -58,13 +58,14 @@ public class Event {
 
 	public Event(String title, String address, String toDateTime, String fromDateTime,
 			String entityKey, String description, String lastTouchDateTime, List<String> comments,
-			List<String> likes, Double lat, Double lon) {
+			List<String> likes, Double lat, Double lon, String category) {
 		mFromCalendar = new GregorianCalendar();
 		mToCalendar = new GregorianCalendar();
 		mTitle = title;
 		mAddress = address;
 		mEventID = entityKey;
 		mDescription = description;
+		mCategory = category;
 		mLikes = new ArrayList<String>();
 		if (likes != null) {
 			for (String like : likes) {
