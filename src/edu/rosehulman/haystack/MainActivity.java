@@ -281,7 +281,8 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 				|| mCategory.equals(getResources().getString(R.string.all))) {
 			Event temp = new Event(event.getTitle(), event.getAddress(), event.getToDateTime(),
 					event.getFromDateTime(), event.getEntityKey(), event.getDescription(),
-					event.getLastTouchDateTime(), event.getComments(), event.getLikes(), event.getLat(), event.getLon(), event.getCategory());
+					event.getLastTouchDateTime(), event.getComments(), event.getLikes(),
+					event.getLat(), event.getLon(), event.getCategory());
 			mEvents.add(temp);
 		}
 	}
