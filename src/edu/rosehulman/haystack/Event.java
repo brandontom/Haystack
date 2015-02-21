@@ -40,22 +40,6 @@ public class Event {
 	private double mLat;
 	private double mLon;
 
-	public Event() {
-		mTitle = "Action Center Plaza";
-		mStartHour = 8;
-		mStartMinute = 30;
-		mEndHour = 11;
-		mEndMinute = 0;
-		mDescription = "Free Drinks on Tuesdays!";
-		mAddress = "5500 Wabash Ave Terre Haute, IN 47803";
-		mLikes = new ArrayList<String>();
-		mComments = new ArrayList<Comment>();
-		mFromCalendar = new GregorianCalendar();
-		mToCalendar = new GregorianCalendar();
-		mLat = 0;
-		mLon = 0;
-	}
-
 	public Event(String title, String address, String toDateTime, String fromDateTime,
 			String entityKey, String description, String lastTouchDateTime, List<String> comments,
 			List<String> likes, Double lat, Double lon, String category) {
@@ -84,7 +68,7 @@ public class Event {
 			}
 		}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat(MainActivity.DATE_FORMAT);
 		if (mFromDateTime != null && mToDateTime != null) {
 			try {
 				Date fromDate = sdf.parse(mFromDateTime);
@@ -98,7 +82,7 @@ public class Event {
 
 			} catch (ParseException e) {
 				// Auto-generated catch block
-				Log.d("MIN", "parsing dates error: " + e);
+				Log.d(MainActivity.HS, "parsing dates error: " + e);
 			}
 		}
 
@@ -153,7 +137,7 @@ public class Event {
 	public String getShortDescription() {
 		if (mDescription == null) {
 			return "No Description";
-		}else if(mDescription.equals("")){
+		} else if (mDescription.equals("")) {
 			return " ";
 		}
 		if (mDescription.length() > MAX_DESC_LENGTH) {
@@ -245,7 +229,7 @@ public class Event {
 				returnedQuote = MainActivity.mService.dbevent().one(entityKeys[0]).execute();
 
 			} catch (IOException e) {
-				Log.e("BRANDON", "Failed to insert quote" + e);
+				Log.e(MainActivity.HS, "Failed to insert quote" + e);
 			}
 			return returnedQuote;
 		}
@@ -255,7 +239,7 @@ public class Event {
 			super.onPostExecute(result);
 
 			if (result == null) {
-				Log.e("BRANDON", "Result is null. Failed loading.");
+				Log.e(MainActivity.HS, "Result is null. Failed loading.");
 				return;
 			}
 			// result.getItems() could be null

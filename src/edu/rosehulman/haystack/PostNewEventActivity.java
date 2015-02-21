@@ -38,6 +38,14 @@ import com.appspot.tombn_songm_haystack.haystack.model.DbEvent;
 
 public class PostNewEventActivity extends Activity {
 
+	private static final String OK = "OK";
+	private static final String STATUS = "status";
+	private static final String RESULTS = "results";
+	private static final String FORMATTED_ADDRESS = "formatted_address";
+	private static final String LOCATION2 = "location";
+	private static final String GEOMETRY = "geometry";
+	private static final String LNG = "lng";
+	private static final String LAT = "lat";
 	private EditText title;
 	private static Button fromTimePicker;
 	private static Button fromDatePicker;
@@ -72,9 +80,8 @@ public class PostNewEventActivity extends Activity {
 		title = (EditText) findViewById(R.id.edit_title);
 
 		fromTimePicker = (Button) findViewById(R.id.from_time_button);
-		fromTimePicker
-				.setText(Event.convertTime(fromCal.get(Calendar.HOUR_OF_DAY),
-						fromCal.get(Calendar.MINUTE)));
+		fromTimePicker.setText(Event.convertTime(fromCal.get(Calendar.HOUR_OF_DAY),
+				fromCal.get(Calendar.MINUTE)));
 		fromTimePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -83,18 +90,10 @@ public class PostNewEventActivity extends Activity {
 			}
 
 		});
-		// Calendar cal = Calendar.getInstance();
-		// cal.getTime();
-		// SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		//
-		//
-		// fromTimePicker.setText(sdf.format(cal.getTime()));
 
 		fromDatePicker = (Button) findViewById(R.id.from_date_button);
-		fromDatePicker
-				.setText(1 + fromCal.get(Calendar.MONTH) + "/"
-						+ fromCal.get(Calendar.DATE) + "/"
-						+ fromCal.get(Calendar.YEAR));
+		fromDatePicker.setText(1 + fromCal.get(Calendar.MONTH) + "/" + fromCal.get(Calendar.DATE)
+				+ "/" + fromCal.get(Calendar.YEAR));
 		fromDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -117,8 +116,8 @@ public class PostNewEventActivity extends Activity {
 		});
 
 		toDatePicker = (Button) findViewById(R.id.to_date_button);
-		toDatePicker.setText(1 + toCal.get(Calendar.MONTH) + "/"
-				+ toCal.get(Calendar.DATE) + "/" + toCal.get(Calendar.YEAR));
+		toDatePicker.setText(1 + toCal.get(Calendar.MONTH) + "/" + toCal.get(Calendar.DATE) + "/"
+				+ toCal.get(Calendar.YEAR));
 		toDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -135,8 +134,7 @@ public class PostNewEventActivity extends Activity {
 
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus) {
-					(new CheckAddressTask()).execute(address.getEditableText()
-							.toString());
+					(new CheckAddressTask()).execute(address.getEditableText().toString());
 				}
 			}
 		});
@@ -147,8 +145,7 @@ public class PostNewEventActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				clickedPost = true;
-				(new CheckAddressTask()).execute(address.getEditableText()
-						.toString());
+				(new CheckAddressTask()).execute(address.getEditableText().toString());
 			}
 		});
 
@@ -163,12 +160,10 @@ public class PostNewEventActivity extends Activity {
 
 		mCategorySpinner = (Spinner) findViewById(R.id.post_category_spinner);
 
-		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter
-				.createFromResource(this, R.array.category_spinner_array,
-						android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> arraySpinnerAdapter = ArrayAdapter.createFromResource(this,
+				R.array.category_spinner_array, android.R.layout.simple_spinner_item);
 
-		arraySpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		arraySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		mCategorySpinner.setAdapter(arraySpinnerAdapter);
 
@@ -184,12 +179,10 @@ public class PostNewEventActivity extends Activity {
 			return;
 		} else if (fromCal == null || toCal == null) {
 			Toast.makeText(PostNewEventActivity.this,
-					"You must have a start and end time for the event.",
-					Toast.LENGTH_SHORT).show();
+					"You must have a start and end time for the event.", Toast.LENGTH_SHORT).show();
 			return;
 		} else if (fromCal.getTimeInMillis() >= toCal.getTimeInMillis()) {
-			Toast.makeText(
-					PostNewEventActivity.this,
+			Toast.makeText(PostNewEventActivity.this,
 					"The event ending time cannot be set before the starting time.",
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -205,7 +198,7 @@ public class PostNewEventActivity extends Activity {
 		dbevent.setLon(mLon);
 		dbevent.setLikesSize(LIKES_SIZE);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat(MainActivity.DATE_FORMAT);
 		dbevent.setFromDateTime(sdf.format(fromCal.getTime()));
 		dbevent.setToDateTime(sdf.format(toCal.getTime()));
 
@@ -238,8 +231,7 @@ public class PostNewEventActivity extends Activity {
 		}
 
 		@Override
-		public void onTimeSet(TimePicker view, final int hourOfDay,
-				final int minute) {
+		public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
 			// Do something with the time chosen by the user
 			mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			mCal.set(Calendar.MINUTE, minute);
@@ -294,16 +286,14 @@ public class PostNewEventActivity extends Activity {
 		df.show(getFragmentManager(), "");
 	}
 
-	public static class InsertEventTask extends
-			AsyncTask<DbEvent, Void, DbEvent> {
+	public static class InsertEventTask extends AsyncTask<DbEvent, Void, DbEvent> {
 
 		@Override
 		protected DbEvent doInBackground(DbEvent... params) {
 			// Auto-generated method stub
 			DbEvent event = null;
 			try {
-				event = MainActivity.mService.dbevent().insert(params[0])
-						.execute();
+				event = MainActivity.mService.dbevent().insert(params[0]).execute();
 			} catch (IOException e) {
 
 			}
@@ -340,17 +330,15 @@ public class PostNewEventActivity extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
-				HttpGet getMethod = new HttpGet(PostNewEventActivity.BASE_URL
-						+ "?address=" + params[0].replace(' ', '+'));
+				HttpGet getMethod = new HttpGet(PostNewEventActivity.BASE_URL + "?address="
+						+ params[0].replace(' ', '+'));
 
-				HttpResponse httpResponse = new DefaultHttpClient()
-						.execute(getMethod);
+				HttpResponse httpResponse = new DefaultHttpClient().execute(getMethod);
 				int res = httpResponse.getStatusLine().getStatusCode();
 				if (res == 200) {
 					StringBuilder builder = new StringBuilder();
-					BufferedReader bufferedReader = new BufferedReader(
-							new InputStreamReader(httpResponse.getEntity()
-									.getContent()));
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+							httpResponse.getEntity().getContent()));
 					for (String s = bufferedReader.readLine(); s != null; s = bufferedReader
 							.readLine()) {
 						builder.append(s);
@@ -384,17 +372,16 @@ public class PostNewEventActivity extends Activity {
 	}
 
 	public void parseGeolocationReturn(JSONObject geoJSON) throws JSONException {
-		if (geoJSON == null || !geoJSON.getString("status").equals("OK")) {
+		if (geoJSON == null || !geoJSON.getString(STATUS).equals(OK)) {
 			return;
 		}
 
 		mCorrectAddress = true;
-		JSONObject result = geoJSON.getJSONArray("results").getJSONObject(0);
-		String formattedAddress = result.getString("formatted_address");
+		JSONObject result = geoJSON.getJSONArray(RESULTS).getJSONObject(0);
+		String formattedAddress = result.getString(FORMATTED_ADDRESS);
 		address.setText(formattedAddress);
-		JSONObject location = result.getJSONObject("geometry").getJSONObject(
-				"location");
-		mLat = location.getDouble("lat");
-		mLon = location.getDouble("lng");
+		JSONObject location = result.getJSONObject(GEOMETRY).getJSONObject(LOCATION2);
+		mLat = location.getDouble(LAT);
+		mLon = location.getDouble(LNG);
 	}
 }

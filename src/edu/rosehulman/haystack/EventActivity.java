@@ -25,6 +25,8 @@ import com.appspot.tombn_songm_haystack.haystack.model.DbEventProtoCommentsLikes
 
 public class EventActivity extends Activity {
 
+	private static final String DISLIKE_EVENT_TOAST_TEXT = "You disliked this event!";
+	private static final String LIKE_EVENT_TOAST_TEXT = "You like this event!";
 	Event mEvent;
 	ListView mComments;
 	CommentTileAdapter mAdapter;
@@ -42,7 +44,7 @@ public class EventActivity extends Activity {
 
 		mEvent = getEventByPosition(pos);
 		mRecentComment = null;
-		
+
 		TextView distanceView = (TextView) findViewById(R.id.distance);
 		double eLat = mEvent.getLat();
 		double eLon = mEvent.getLon();
@@ -71,7 +73,7 @@ public class EventActivity extends Activity {
 			public void onClick(View v) {
 				// do whatever to like the event.
 				if (!mEvent.getLikes().contains(MainActivity.id)) {
-					Toast.makeText(EventActivity.this, "You like this event!", Toast.LENGTH_SHORT)
+					Toast.makeText(EventActivity.this, LIKE_EVENT_TOAST_TEXT, Toast.LENGTH_SHORT)
 							.show();
 					mEvent.getLikes().add(MainActivity.id);
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(
@@ -80,8 +82,8 @@ public class EventActivity extends Activity {
 					numLikes.setText(num + (num == 1 ? " like" : " likes"));
 					mEvent.like();
 				} else {
-					Toast.makeText(EventActivity.this, "You disliked this event!",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(EventActivity.this, DISLIKE_EVENT_TOAST_TEXT, Toast.LENGTH_SHORT)
+							.show();
 					mEvent.getLikes().remove(MainActivity.id);
 					((ImageView) v).setImageDrawable(EventActivity.this.getResources().getDrawable(
 							android.R.drawable.btn_star_big_off));
@@ -90,9 +92,6 @@ public class EventActivity extends Activity {
 					mEvent.unLike();
 				}
 			}
-			
-
-			
 
 		});
 
@@ -118,8 +117,7 @@ public class EventActivity extends Activity {
 				addComment(text);
 			}
 		});
-		String[] categories = getResources()
-				.getStringArray(R.array.category_spinner_array);
+		String[] categories = getResources().getStringArray(R.array.category_spinner_array);
 		View view = address.getRootView();
 		if (mEvent.getCategory().equals(categories[0])) {
 			view.setBackgroundColor(getResources().getColor(R.color.Light_Red));
@@ -159,7 +157,7 @@ public class EventActivity extends Activity {
 			try {
 				returnedQuote = MainActivity.mService.dbevent().one(entityKeys[0]).execute();
 			} catch (IOException e) {
-				Log.e("BRANDON", "Failed to insert quote" + e);
+				Log.e(MainActivity.HS, "Failed to insert quote" + e);
 			}
 			return returnedQuote;
 		}
@@ -169,7 +167,7 @@ public class EventActivity extends Activity {
 			super.onPostExecute(result);
 
 			if (result == null) {
-				Log.e("BRANDON", "Result is null. Failed loading.");
+				Log.e(MainActivity.HS, "Result is null. Failed loading.");
 				return;
 			}
 			// result.getItems() could be null

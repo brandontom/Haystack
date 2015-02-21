@@ -43,6 +43,8 @@ import com.google.api.client.json.gson.GsonFactory;
 
 public class MainActivity extends Activity implements SideSwipeFragment.NavigationDrawerCallbacks {
 
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss.SSS";
+
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -50,7 +52,6 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private SideSwipeFragment mNavigationDrawerFragment;
 
 	public static final String KEY_EVENT_ID = "KEY_EVENT_ID";
-	public static final String MQ = "MQ";
 	public static final String HS = "HS";
 
 	public static ArrayList<Event> mEvents = new ArrayList<Event>();
@@ -222,7 +223,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 	private boolean filterEventByTime(DbEvent event) {
 		GregorianCalendar current = new GregorianCalendar();
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		String mFromDateTime = event.getFromDateTime();
 		String mToDateTime = event.getToDateTime();
 		GregorianCalendar mFromCalendar = new GregorianCalendar();
@@ -236,7 +237,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 
 		} catch (ParseException e) {
 			// Auto-generated catch block
-			Log.d("MIN", "parsing dates error in MainActivity: " + e);
+			Log.d(HS, "parsing dates error in MainActivity: " + e);
 		}
 		// only add events if they are the correct
 		if (mFromCalendar.getTimeInMillis() >= current.getTimeInMillis()
@@ -266,7 +267,7 @@ public class MainActivity extends Activity implements SideSwipeFragment.Navigati
 					return true;
 				}
 			} else {
-				Log.d("MIN", "timespinnerchoicenum out of bounds");
+				Log.d(HS, "timespinnerchoicenum out of bounds");
 				return false;
 			}
 		} else if ((mFromCalendar.getTimeInMillis() <= current.getTimeInMillis() && mToCalendar
